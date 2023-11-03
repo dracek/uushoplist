@@ -1,6 +1,6 @@
 //@@viewOn:imports
-import { Utils, createVisualComponent, useSession, Lsi } from "uu5g05";
-import Uu5Elements from "uu5g05-elements";
+import { Utils, createVisualComponent, useSession, Lsi, Content } from "uu5g05";
+import Uu5Elements, { Link } from "uu5g05-elements";
 import Plus4U5Elements from "uu_plus4u5g02-elements";
 import { withRoute } from "uu_plus4u5g02-app";
 
@@ -42,6 +42,7 @@ let Home = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const { identity } = useSession();
+    console.log(identity);
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -76,6 +77,11 @@ let Home = createVisualComponent({
           <Uu5Elements.Text category="story" segment="body" type="common">
             <Lsi import={importLsi} path={["Home", "serverSide"]} />
           </Uu5Elements.Text>
+        </WelcomeRow>
+        <WelcomeRow>
+          <Uu5Elements.Text category="story" segment="body" type="common">
+            <Content>{"<uu5string/>Úvodní / průvodní texttík. Zbytek smazat pls! <Uu5Elements.Link href='shopList?id=5' >Seznam 5</Uu5Elements.Link>"}</Content>
+            </Uu5Elements.Text>
         </WelcomeRow>
       </div>
     );
