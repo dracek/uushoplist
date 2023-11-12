@@ -1,7 +1,5 @@
 //@@viewOn:imports
-import React from "react";
-import { v4 as uuidv4 } from "uuid";
-import {createComponent, useReducer, useSession} from "uu5g05";
+import { createComponent, useReducer, useSession } from "uu5g05";
 import Config from "./config/config.js";
 //@@viewOff:imports
 
@@ -11,50 +9,51 @@ const ACTION_NAME_CHANGE = "changeName";
 const ACTION_ITEM_TOGGLE = "toggleItem";
 const ACTION_ITEM_CREATE = "createItem";
 const ACTION_ITEM_DELETE = "deleteItem";
-const ACTION_USER_ADD    = "addUser";
-
-
-const initialReducerState = {
-    name: "Seznam č.",
-    items: [
-      {
-        name: "mlíko",
-        done: true
-      },
-      {
-        name: "zelí",
-        done: false
-      },
-    ],
-    owner: "15-8545-1",
-    users: ["15-8545-1", "0-0"]
-};
-
-function createInitialState(id, userId){
-  let newState = Object.assign({}, initialReducerState);
-  newState.name = newState.name + id;
-
-  if(id == 1){
-    newState.owner = userId;
-  } else if(id == 2){
-    newState.users.push(userId);
-  }
-
-  return newState;
-
-}
+const ACTION_USER_ADD = "addUser";
+const ACTION_USER_DELETE = "deleteUser";
 
 //@@viewOff:constants
 
 //@@viewOn:helpers
+const initialReducerState = {
+  name: "Seznam č.",
+  items: [
+    {
+      name: "trvanlivé mléko",
+      done: true,
+    },
+    {
+      name: "hlávkové zelí",
+      done: false,
+    },
+    {
+      name: "játrová paštika",
+      done: false,
+    },
+  ],
+  owner: "15-8545-1",
+  users: ["7411-6694-3445-0000"],
+};
 
-//status: "success", // backend calls status.. usestate???????????
+function createInitialState(id, userId) {
+  let newState = Object.assign({}, initialReducerState);
+  newState.name = newState.name + id;
+
+  if (id == 1) {
+    newState.owner = userId;
+  } else if (id == 2) {
+    newState.users = [...newState.users, userId];
+  } else {
+    alert("Na tento list nemáte oprávnění - backend by vrátil error.");
+  }
+  return newState;
+}
 
 // jen pro mockování server calls :)
 function reducer(state, action) {
   const payload = action.payload;
 
-  console.log("reducer change", action.type, payload);
+  //console.log("Reducer action:", action.type, payload);
 
   switch (action.type) {
     case ACTION_NAME_CHANGE:
@@ -74,7 +73,7 @@ function reducer(state, action) {
     case ACTION_ITEM_CREATE: {
       const newItem = {
         name: payload,
-        done: false
+        done: false,
       };
       return { ...state, items: [...state.items, newItem] };
     }
@@ -86,24 +85,14 @@ function reducer(state, action) {
       };
 
     case ACTION_USER_ADD:
-      console.log(payload, "-");
       return { ...state, users: [...state.users, payload] };
 
-    /*
-    case "remove":
-      // immutable remove of item from array
-      return items.filter((item) => item.id !== payload.id);
-    case "setRating":
-      // immutable update of item in array
-      return items.map((item) => {
-        if (item.id === payload.id) {
-          return { ...item, rating: payload.rating };
-        } else {
-          return item;
-        }
-      });
-    case "reset":
-      return payload.items; */
+    case ACTION_USER_DELETE:
+      return {
+        ...state,
+        users: state.users.filter((item) => item != payload),
+      };
+
     default:
       console.error("Unrecognized action type", action.type);
       return state;
@@ -126,11 +115,7 @@ const ShopListDetailDataProvider = createComponent({
 
   render(props) {
     //@@viewOn:private
-    const { children } = props;
-
-    console.log("xxx", props);
     const { identity } = useSession();
-    console.log("session", identity);
 
     const [reducerState, dispatch] = useReducer(reducer, createInitialState(props.id, identity.uuIdentity));
 
@@ -169,27 +154,38 @@ const ShopListDetailDataProvider = createComponent({
       });
     }
 
-    const renderChildren = () => {
-      return React.Children.map(children, (child) => {
-        return React.cloneElement(child, {
-          shopList: reducerState,
-          callsMap: {
-            [ACTION_NAME_CHANGE]: handleChangeName,
-            [ACTION_ITEM_TOGGLE]: handleToggleItem,
-            [ACTION_ITEM_CREATE]: handleCreateItem,
-            [ACTION_ITEM_DELETE]: handleDeleteItem,
-            [ACTION_USER_ADD]: handleAddUser,
-          },
+    function handleDeleteUser(id) {
+      if (identity.uuIdentity === id) {
+        alert(
+          "Touto akcí uživatel sám sebe smaže z tohoto listu, po uložení by došlo k přesměrování na routu se seznamem shopping listů a tento list se mu tam už nezobrazí. (routa zatím není implementována)"
+        );
+      } else {
+        dispatch({
+          type: ACTION_USER_DELETE,
+          payload: id,
         });
-      });
+      }
+    }
+
+    const newProps = {
+      shopList: reducerState,
+      callsMap: {
+        [ACTION_NAME_CHANGE]: handleChangeName,
+        [ACTION_ITEM_TOGGLE]: handleToggleItem,
+        [ACTION_ITEM_CREATE]: handleCreateItem,
+        [ACTION_ITEM_DELETE]: handleDeleteItem,
+        [ACTION_USER_ADD]: handleAddUser,
+        [ACTION_USER_DELETE]: handleDeleteUser,
+      },
     };
+
     //@@viewOff:private
 
     //@@viewOn:interface
     //@@viewOff:interface
 
     //@@viewOn:render
-    return <>Hi! {renderChildren()}</> ?? null;
+    return props.children(newProps);
     //@@viewOff:render
   },
 });

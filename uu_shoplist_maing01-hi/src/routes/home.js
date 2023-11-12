@@ -1,6 +1,6 @@
 //@@viewOn:imports
 import { Utils, createVisualComponent, useSession, Lsi, Content } from "uu5g05";
-import Uu5Elements, { Link } from "uu5g05-elements";
+import Uu5Elements from "uu5g05-elements";
 import Plus4U5Elements from "uu_plus4u5g02-elements";
 import { withRoute } from "uu_plus4u5g02-app";
 
@@ -15,11 +15,7 @@ import importLsi from "../lsi/import-lsi.js";
 
 //@@viewOn:css
 const Css = {
-  icon: () =>
-    Config.Css.css({
-      fontSize: 48,
-      lineHeight: "1em",
-    }),
+  main: () => Config.Css.css({}),
 };
 //@@viewOff:css
 
@@ -42,14 +38,13 @@ let Home = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const { identity } = useSession();
-    console.log(identity);
     //@@viewOff:private
 
     //@@viewOn:interface
     //@@viewOff:interface
 
     //@@viewOn:render
-    const attrs = Utils.VisualComponent.getAttrs(props);
+    const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
     return (
       <div {...attrs}>
         <RouteBar />
@@ -63,29 +58,22 @@ let Home = createVisualComponent({
             </Uu5Elements.Text>
           )}
         </WelcomeRow>
-        <WelcomeRow left={<Uu5Elements.Icon icon="mdi-human-greeting" className={Css.icon()} />}>
+        <WelcomeRow>
           <Uu5Elements.Text category="story" segment="body" type="common">
-            <Lsi import={importLsi} path={["Home", "intro"]} />
-          </Uu5Elements.Text>
-        </WelcomeRow>
-        <WelcomeRow left={<Uu5Elements.Icon icon="mdi-monitor" className={Css.icon()} />}>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Lsi import={importLsi} path={["Home", "clientSide"]} />
-          </Uu5Elements.Text>
-        </WelcomeRow>
-        <WelcomeRow left={<Uu5Elements.Icon icon="mdi-server" className={Css.icon()} />}>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Lsi import={importLsi} path={["Home", "serverSide"]} />
+            <Content>
+              {
+                "<uu5string/>Základní seznam, aktuálně přihlášený uživatel je owner listu <Uu5Elements.Link href='shopList?id=1' >Seznam 1</Uu5Elements.Link> (má všechna oprávnění)"
+              }
+            </Content>
           </Uu5Elements.Text>
         </WelcomeRow>
         <WelcomeRow>
           <Uu5Elements.Text category="story" segment="body" type="common">
-            <Content>{"<uu5string/>Základní seznam, přihlášený uživatel je owner listu <Uu5Elements.Link href='shopList?id=1' >Seznam 1</Uu5Elements.Link>"}</Content>
-            </Uu5Elements.Text>
-        </WelcomeRow>
-        <WelcomeRow>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Content>{"<uu5string/>Úvodní / průvodní texttík. Zbytek smazat pls! <Uu5Elements.Link href='shopList?id=5' >Seznam 5</Uu5Elements.Link>"}</Content>
+            <Content>
+              {
+                "<uu5string/>Základní seznam, aktuálně přihlášený uživatel je member listu <Uu5Elements.Link href='shopList?id=2' >Seznam 2</Uu5Elements.Link> (omezené oprávnění)"
+              }
+            </Content>
           </Uu5Elements.Text>
         </WelcomeRow>
       </div>

@@ -1,11 +1,13 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content } from "uu5g05";
+import { createVisualComponent, Utils } from "uu5g05";
+import { Grid } from "uu5g05-elements";
+import { withRoute } from "uu_plus4u5g02-app";
 import Config from "./config/config.js";
 import ShopListDetailDataProvider from "../bricks/shop-list/shop-list-detail-data-provider.js";
 import ShopListDetail from "../bricks/shop-list/shop-list-detail.js";
 import EditableHeader from "../bricks/shop-list/editable-header.js";
 import ListUsers from "../bricks/shop-list/list-users";
-import {withRoute} from "uu_plus4u5g02-app";
+import RouteBar from "../core/route-bar.js";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -14,6 +16,13 @@ import {withRoute} from "uu_plus4u5g02-app";
 //@@viewOn:css
 const Css = {
   main: () => Config.Css.css({}),
+  inner: () =>
+    Config.Css.css({
+      display: "block",
+      padding: "24px 40px",
+      margin: "0 auto",
+      maxWidth: "1400px",
+    }),
 };
 //@@viewOff:css
 
@@ -36,12 +45,10 @@ let ShopList = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
-    const { children } = props;
     //@@viewOff:private
 
     //@@viewOn:interface
     //@@viewOff:interface
-    console.log("route",props);
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
@@ -49,12 +56,17 @@ let ShopList = createVisualComponent({
 
     return currentNestingLevel ? (
       <div {...attrs}>
-        <div>Visual Component {ShopList.uu5Tag}</div>
+        <RouteBar />
         <ShopListDetailDataProvider id={props.params.id}>
-          <EditableHeader />
-          <ShopListDetail/>
-          <ListUsers/>
-          <Content nestingLevel={currentNestingLevel}>{children}</Content>
+          {(props) => (
+            <div className={Css.inner()}>
+              {EditableHeader(props)}
+              <Grid templateColumns={{ xs: "1fr", m: "2fr 1fr" }} columnGap={"25px"}>
+                {ShopListDetail(props)}
+                {ListUsers(props)}
+              </Grid>
+            </div>
+          )}
         </ShopListDetailDataProvider>
       </div>
     ) : null;

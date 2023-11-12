@@ -11,6 +11,14 @@ import Config from "./config/config.js";
 //@@viewOn:css
 const Css = {
   main: () => Config.Css.css({}),
+  submit: () =>
+    Config.Css.css({
+      marginLeft: "10px",
+    }),
+  textRow: () =>
+    Config.Css.css({
+      marginBottom: "10px",
+    }),
 };
 //@@viewOff:css
 
@@ -33,7 +41,6 @@ const ListUsersAddModal = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
-    const { children } = props;
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -41,19 +48,17 @@ const ListUsersAddModal = createVisualComponent({
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ListUsersAddModal);
 
     function onSubmit(event) {
-      console.log(event);
       props.onAdd(event.data.value.id);
     }
 
     return (
-      <Modal header={"Přidat uživatele"} open={props.open} onClose={props.onClose} collapsible={false}>
+      <Modal {...attrs} header={"Přidat uživatele"} open={props.open} onClose={props.onClose} collapsible={false}>
         <Form onSubmit={onSubmit} disableLeaveConfirmation={true}>
-          <FormText name="id" label="ID uživatele" required placeholder={"UUID uživatele"} />
+          <FormText name="id" label="ID uživatele" required placeholder={"UUID uživatele"} className={Css.textRow()}/>
           <CancelButton onClick={props.onClose} />
-          <SubmitButton />
+          <SubmitButton className={Css.submit()} />
         </Form>
       </Modal>
       //@@viewOff:render

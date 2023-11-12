@@ -11,6 +11,14 @@ import Config from "./config/config.js";
 //@@viewOn:css
 const Css = {
   main: () => Config.Css.css({}),
+  submit: () =>
+    Config.Css.css({
+      marginLeft: "10px",
+    }),
+  textRow: () =>
+    Config.Css.css({
+      marginBottom: "10px",
+    }),
 };
 //@@viewOff:css
 
@@ -27,20 +35,16 @@ const EditHeaderModal = createVisualComponent({
   propTypes: {},
   //@@viewOff:propTypes
 
-  /* TODO name, onEdit*/
-
   //@@viewOn:defaultProps
   defaultProps: {},
   //@@viewOff:defaultProps
 
   render(props) {
     //@@viewOn:private
-
     function onSubmit(event) {
       props.onEdit(event.data.value.name);
       props.onClose();
     }
-
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -48,25 +52,20 @@ const EditHeaderModal = createVisualComponent({
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, EditHeaderModal);
-
-    console.log("modal", attrs, currentNestingLevel);
-
-    // responsivity!!!
-    //https://uuapp.plus4u.net/uu-bookkit-maing01/4c1a9edb30aa48ab825d2c5dec3d1b7e/book/page?code=responsivity
 
     return (
-      <Modal header={"Upravit seznam"} open={props.open} onClose={props.onClose} collapsible={false}>
+      <Modal {...attrs} header={"Upravit seznam"} open={props.open} onClose={props.onClose} collapsible={false}>
         <Form onSubmit={onSubmit} disableLeaveConfirmation={true}>
           <FormText
             name="name"
             label="Nový název seznamu"
             initialValue={props.name}
             required
-            placeholder={"sem se něco napíše neasi"}
+            placeholder={"napište sem nový název"}
+            className={Css.textRow()}
           />
           <CancelButton onClick={props.onClose} />
-          <SubmitButton />
+          <SubmitButton className={Css.submit()} />
         </Form>
       </Modal>
       //@@viewOff:render

@@ -12,7 +12,7 @@ const Css = {
   main: ({ screenSize }) =>
     Config.Css.css({
       display: "flex",
-      maxWidth: 624,
+      maxWidth: 800,
       padding: "24px 0",
       margin: "0 auto",
       flexWrap: "wrap",

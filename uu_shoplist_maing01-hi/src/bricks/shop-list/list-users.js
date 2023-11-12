@@ -1,9 +1,8 @@
 //@@viewOn:imports
-import {createVisualComponent, Utils, Content, useState, useSession} from "uu5g05";
-import { Button, Icon, Toggle } from "uu5g05-elements";
-import Plus4U5Elements from "uu_plus4u5g02-elements";
+import { createVisualComponent, Utils, Content, useState, useSession } from "uu5g05";
+import { Button, Icon } from "uu5g05-elements";
 import ListUsersAddModal from "./list-users-add-modal";
-import ShopListDeleteModal from "./shop-list-delete-modal.js";
+import ListUsersDeleteModal from "./list-users-delete-modal";
 import Config from "./config/config.js";
 import ListUsersItem from "./list-users-item";
 //@@viewOff:imports
@@ -13,7 +12,21 @@ import ListUsersItem from "./list-users-item";
 
 //@@viewOn:css
 const Css = {
-  main: () => Config.Css.css({}),
+  main: () =>
+    Config.Css.css({
+      border: "1px solid gray",
+      borderRadius: "5px",
+    }),
+  itemContainer: () =>
+    Config.Css.css({
+      display: "flex",
+      margin: "25px",
+      justifyContent: "space-between",
+    }),
+  leftButton: () =>
+    Config.Css.css({
+      marginLeft: "auto",
+    }),
 };
 //@@viewOff:css
 
@@ -52,7 +65,7 @@ const ListUsers = createVisualComponent({
       setCreateOpen(false);
     }
 
-    function onAdd(data) { //
+    function onAdd(data) {
       props.callsMap.addUser(data);
       setCreateOpen(false);
     }
@@ -68,7 +81,7 @@ const ListUsers = createVisualComponent({
     }
 
     function onDelete(data) {
-      props.callsMap.deleteItem(data);
+      props.callsMap.deleteUser(data);
       setDeleteOpen(false);
       setCurrentItem(null);
     }
@@ -81,36 +94,45 @@ const ListUsers = createVisualComponent({
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
     const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ListUsers);
 
-    console.log("detail map", props.callsMap);
-
     const users = props.shopList && props.shopList.users ? props.shopList.users : [];
 
-    console.log(users);
-    console.log(identity.uuIdentity);
+    function isOwner() {
+      return identity.uuIdentity === props.shopList.owner;
+    }
 
-    function isEditable(uuid){
-      return (identity.uuIdentity === props.shopList.owner || identity.uuIdentity === uuid);
+    function isEditable(uuid) {
+      return identity.uuIdentity === props.shopList.owner || identity.uuIdentity === uuid;
     }
 
     return currentNestingLevel ? (
       <div {...attrs}>
-        <div>Visual Component {ListUsers.uu5Tag}</div>
-        <div>
-            <Button onClick={onCreateOpen}>
-              <Icon icon={"mdi-plus"} /> Přidat
-            </Button>
+        <div className={Css.itemContainer()}>
+          <Button
+            onClick={isOwner() ? onCreateOpen : undefined}
+            className={Css.leftButton()}
+            colorScheme={isOwner() ? "positive" : "negative"}
+          >
+            <Icon icon={"mdi-plus"} /> Přidat
+          </Button>
         </div>
 
         <div>
-          <ListUsersItem uuIdentity={props.shopList.owner} role={"Owner"} isEditable={false}/>
+          <ListUsersItem uuIdentity={props.shopList.owner} role={"Owner"} isEditable={false} />
           <>
-          {users
-            .map((item) => <ListUsersItem key={item} uuIdentity={item} role={"Member"} isEditable={isEditable(item)} />)}
+            {users.map((item) => (
+              <ListUsersItem
+                key={item}
+                uuIdentity={item}
+                role={"Member"}
+                isEditable={isEditable(item)}
+                onDeleteClick={onDeleteOpen}
+              />
+            ))}
           </>
         </div>
 
         <ListUsersAddModal onAdd={onAdd} onClose={onCreateClose} open={createOpen} />
-        <ShopListDeleteModal item={currentItem} onDelete={onDelete} onClose={onDeleteClose} open={deleteOpen} />
+        <ListUsersDeleteModal item={currentItem} onDelete={onDelete} onClose={onDeleteClose} open={deleteOpen} />
 
         <Content nestingLevel={currentNestingLevel}>{children}</Content>
       </div>

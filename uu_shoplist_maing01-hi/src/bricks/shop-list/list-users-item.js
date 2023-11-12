@@ -1,8 +1,8 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content } from "uu5g05";
-import Config from "../config/config.js";
+import { createVisualComponent, Utils } from "uu5g05";
 import Plus4U5Elements from "uu_plus4u5g02-elements";
-import {Button} from "uu5g05-elements";
+import { Button, Icon } from "uu5g05-elements";
+import Config from "../config/config.js";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -10,7 +10,18 @@ import {Button} from "uu5g05-elements";
 
 //@@viewOn:css
 const Css = {
-  main: () => Config.Css.css({}),
+  main: () =>
+    Config.Css.css({
+      border: "1px solid gray",
+      borderRadius: "5px",
+      margin: "25px",
+      padding: "10px",
+    }),
+  itemContainer: () =>
+    Config.Css.css({
+      display: "flex",
+      justifyContent: "space-between",
+    }),
 };
 //@@viewOff:css
 
@@ -33,7 +44,6 @@ const ListUsersItem = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
-    const { children } = props;
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -46,9 +56,15 @@ const ListUsersItem = createVisualComponent({
     const subtitle = props.role + " (" + props.uuIdentity + ")";
 
     return currentNestingLevel ? (
-      <div {...attrs} style={{border: "1px solid", padding: "5px", margin: "10px" }}>
-        <Plus4U5Elements.PersonItem uuIdentity={props.uuIdentity} subtitle={subtitle} />
-        {props.isEditable && <Button>del</Button>}
+      <div {...attrs}>
+        <div className={Css.itemContainer()}>
+          <Plus4U5Elements.PersonItem uuIdentity={props.uuIdentity} subtitle={subtitle} />
+          {props.isEditable && (
+            <Button onClick={() => props.onDeleteClick(props.uuIdentity)}>
+              <Icon icon="mdi-trash-can" />
+            </Button>
+          )}
+        </div>
       </div>
     ) : null;
     //@@viewOff:render

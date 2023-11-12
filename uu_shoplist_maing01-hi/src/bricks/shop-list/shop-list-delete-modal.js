@@ -1,7 +1,7 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content } from "uu5g05";
+import { createVisualComponent, Utils } from "uu5g05";
 import { Modal } from "uu5g05-elements";
-import { Form, FormText, SubmitButton, CancelButton } from "uu5g05-forms";
+import { Form, SubmitButton, CancelButton } from "uu5g05-forms";
 import Config from "./config/config.js";
 //@@viewOff:imports
 
@@ -11,6 +11,10 @@ import Config from "./config/config.js";
 //@@viewOn:css
 const Css = {
   main: () => Config.Css.css({}),
+  submit: () =>
+    Config.Css.css({
+      marginLeft: "10px",
+    }),
 };
 //@@viewOff:css
 
@@ -33,7 +37,6 @@ const ShopListDeleteModal = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
-    const { children } = props;
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -41,7 +44,6 @@ const ShopListDeleteModal = createVisualComponent({
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopListDeleteModal);
 
     function onSubmit(event) {
       props.onDelete(props.item.name);
@@ -51,10 +53,10 @@ const ShopListDeleteModal = createVisualComponent({
     const name = "Opravdu smazat položku " + (props.item && props.item.name) + "?";
 
     return (
-      <Modal header={name} open={props.open} onClose={props.onClose} collapsible={false}>
+      <Modal {...attrs} header={name} open={props.open} onClose={props.onClose} collapsible={false}>
         <Form onSubmit={onSubmit} disableLeaveConfirmation={true}>
           <CancelButton onClick={props.onClose} />
-          <SubmitButton />
+          <SubmitButton className={Css.submit()} />
         </Form>
       </Modal>
       //@@viewOff:render

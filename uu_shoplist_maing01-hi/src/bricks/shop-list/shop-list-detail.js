@@ -12,8 +12,19 @@ import Config from "./config/config.js";
 
 //@@viewOn:css
 const Css = {
-  main: () => Config.Css.css({}),
+  main: () =>
+    Config.Css.css({
+      border: "1px solid gray",
+      borderRadius: "5px",
+    }),
+  itemContainer: () =>
+    Config.Css.css({
+      display: "flex",
+      margin: "25px",
+      justifyContent: "space-between",
+    }),
 };
+
 //@@viewOff:css
 
 //@@viewOn:helpers
@@ -72,7 +83,7 @@ const ShopListDetail = createVisualComponent({
       setCurrentItem(null);
     }
 
-    function t(e){
+    function onDone(e) {
       setShowDone(e.data.value);
     }
 
@@ -85,19 +96,16 @@ const ShopListDetail = createVisualComponent({
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
     const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopListDetail);
 
-    console.log("detail map", props.callsMap);
-
     const items = props.shopList && props.shopList.items ? props.shopList.items : [];
 
     return currentNestingLevel ? (
       <div {...attrs}>
-        <div>Visual Component {ShopListDetail.uu5Tag}</div>
-        <div>
+        <div className={Css.itemContainer()}>
           <div>
-            <Toggle label="Včetně splněných" value={showDone} onChange={t} box />
+            <Toggle label="Včetně splněných" value={showDone} onChange={onDone} box />
           </div>
           <div>
-            <Button onClick={onCreateOpen}>
+            <Button onClick={onCreateOpen} colorScheme="positive">
               <Icon icon={"mdi-plus"} /> Nová
             </Button>
           </div>
@@ -107,7 +115,12 @@ const ShopListDetail = createVisualComponent({
           {items
             .filter((item) => !item.done || showDone)
             .map((item, index) => (
-              <ShopListItem item={item} key={item.name} onToggle={props.callsMap.toggleItem} onDeleteOpen={onDeleteOpen} />
+              <ShopListItem
+                item={item}
+                key={item.name}
+                onToggle={props.callsMap.toggleItem}
+                onDeleteOpen={onDeleteOpen}
+              />
             ))}
         </div>
 
