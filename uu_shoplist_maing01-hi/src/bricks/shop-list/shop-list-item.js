@@ -47,7 +47,7 @@ const ShopListItem = createVisualComponent({
       <div {...attrs} style={{ border: "1px solid", margin: "25px", padding: "10px" }}>
         <div style={isDone ? { textDecoration: "line-through" } : {}}>
           =({props.item.name})=
-          <Button onClick={() => props.onToggle(props.item.id)}>
+          <Button onClick={() => props.onToggle(props.item.name)}>
             <Icon icon={isDone ? "mdi-check-outline" : "mdi-check"} />
           </Button>
           <Button onClick={() => props.onDeleteOpen(props.item)}>

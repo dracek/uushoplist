@@ -80,8 +80,13 @@ let Home = createVisualComponent({
         </WelcomeRow>
         <WelcomeRow>
           <Uu5Elements.Text category="story" segment="body" type="common">
-            <Content>{"<uu5string/>Úvodní / průvodní texttík. Zbytek smazat pls! <Uu5Elements.Link href='shopList?id=5' >Seznam 5</Uu5Elements.Link>"}</Content>
+            <Content>{"<uu5string/>Základní seznam, přihlášený uživatel je owner listu <Uu5Elements.Link href='shopList?id=1' >Seznam 1</Uu5Elements.Link>"}</Content>
             </Uu5Elements.Text>
+        </WelcomeRow>
+        <WelcomeRow>
+          <Uu5Elements.Text category="story" segment="body" type="common">
+            <Content>{"<uu5string/>Úvodní / průvodní texttík. Zbytek smazat pls! <Uu5Elements.Link href='shopList?id=5' >Seznam 5</Uu5Elements.Link>"}</Content>
+          </Uu5Elements.Text>
         </WelcomeRow>
       </div>
     );

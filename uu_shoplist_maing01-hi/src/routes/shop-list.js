@@ -4,6 +4,8 @@ import Config from "./config/config.js";
 import ShopListDetailDataProvider from "../bricks/shop-list/shop-list-detail-data-provider.js";
 import ShopListDetail from "../bricks/shop-list/shop-list-detail.js";
 import EditableHeader from "../bricks/shop-list/editable-header.js";
+import ListUsers from "../bricks/shop-list/list-users";
+import {withRoute} from "uu_plus4u5g02-app";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -18,7 +20,7 @@ const Css = {
 //@@viewOn:helpers
 //@@viewOff:helpers
 
-const ShopList = createVisualComponent({
+let ShopList = createVisualComponent({
   //@@viewOn:statics
   uu5Tag: Config.TAG + "ShopList",
   nestingLevel: ["areaCollection", "area"],
@@ -39,9 +41,7 @@ const ShopList = createVisualComponent({
 
     //@@viewOn:interface
     //@@viewOff:interface
-
-    console.log("-----");
-    console.log(props);
+    console.log("route",props);
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
@@ -50,9 +50,10 @@ const ShopList = createVisualComponent({
     return currentNestingLevel ? (
       <div {...attrs}>
         <div>Visual Component {ShopList.uu5Tag}</div>
-        <ShopListDetailDataProvider>
+        <ShopListDetailDataProvider id={props.params.id}>
           <EditableHeader />
-          <ShopListDetail callsMap={props.callsMap} />
+          <ShopListDetail/>
+          <ListUsers/>
           <Content nestingLevel={currentNestingLevel}>{children}</Content>
         </ShopListDetailDataProvider>
       </div>
@@ -60,6 +61,8 @@ const ShopList = createVisualComponent({
     //@@viewOff:render
   },
 });
+
+ShopList = withRoute(ShopList, { authenticated: true });
 
 //@@viewOn:exports
 export { ShopList };

@@ -1,5 +1,5 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content } from "uu5g05";
+import { createVisualComponent, Utils } from "uu5g05";
 import { Modal } from "uu5g05-elements";
 import { Form, FormText, SubmitButton, CancelButton } from "uu5g05-forms";
 import Config from "./config/config.js";
@@ -17,9 +17,9 @@ const Css = {
 //@@viewOn:helpers
 //@@viewOff:helpers
 
-const ShopListDeleteModal = createVisualComponent({
+const ListUsersAddModal = createVisualComponent({
   //@@viewOn:statics
-  uu5Tag: Config.TAG + "ShopListDeleteModal",
+  uu5Tag: Config.TAG + "ListUsersAddModal",
   nestingLevel: ["areaCollection", "area"],
   //@@viewOff:statics
 
@@ -41,29 +41,27 @@ const ShopListDeleteModal = createVisualComponent({
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopListDeleteModal);
+    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ListUsersAddModal);
 
     function onSubmit(event) {
-      props.onDelete(props.item.name);
-      props.onClose();
+      console.log(event);
+      props.onAdd(event.data.value.id);
     }
 
-    const name = "Opravdu smazat položku " + (props.item && props.item.name) + "?";
-
     return (
-      <Modal header={name} open={props.open} onClose={props.onClose} collapsible={false}>
+      <Modal header={"Přidat uživatele"} open={props.open} onClose={props.onClose} collapsible={false}>
         <Form onSubmit={onSubmit} disableLeaveConfirmation={true}>
+          <FormText name="id" label="ID uživatele" required placeholder={"UUID uživatele"} />
           <CancelButton onClick={props.onClose} />
           <SubmitButton />
         </Form>
       </Modal>
       //@@viewOff:render
     );
-    //@@viewOff:render
   },
 });
 
 //@@viewOn:exports
-export { ShopListDeleteModal };
-export default ShopListDeleteModal;
+export { ListUsersAddModal };
+export default ListUsersAddModal;
 //@@viewOff:exports

@@ -1,7 +1,7 @@
 //@@viewOn:imports
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
-import { createComponent, useReducer } from "uu5g05";
+import {createComponent, useReducer, useSession} from "uu5g05";
 import Config from "./config/config.js";
 //@@viewOff:imports
 
@@ -11,26 +11,38 @@ const ACTION_NAME_CHANGE = "changeName";
 const ACTION_ITEM_TOGGLE = "toggleItem";
 const ACTION_ITEM_CREATE = "createItem";
 const ACTION_ITEM_DELETE = "deleteItem";
+const ACTION_USER_ADD    = "addUser";
+
 
 const initialReducerState = {
-  // todo remove shoplist from depth?
-  shopList: {
-    name: "Seznam č.1",
+    name: "Seznam č.",
     items: [
       {
         name: "mlíko",
-        done: true,
-        id: "256",
+        done: true
       },
       {
         name: "zelí",
-        done: false,
-        id: "291335",
+        done: false
       },
     ],
-    owner: "0-0",
-  },
+    owner: "15-8545-1",
+    users: ["15-8545-1", "0-0"]
 };
+
+function createInitialState(id, userId){
+  let newState = Object.assign({}, initialReducerState);
+  newState.name = newState.name + id;
+
+  if(id == 1){
+    newState.owner = userId;
+  } else if(id == 2){
+    newState.users.push(userId);
+  }
+
+  return newState;
+
+}
 
 //@@viewOff:constants
 
@@ -46,35 +58,36 @@ function reducer(state, action) {
 
   switch (action.type) {
     case ACTION_NAME_CHANGE:
-      return { ...state, shopList: Object.assign({}, state.shopList, { name: payload }) };
+      return { ...state, name: payload };
 
     case ACTION_ITEM_TOGGLE: {
-      const shopListItems = state.shopList.items.map((item) => {
-        if (item.id === payload) {
+      const changedItems = state.items.map((item) => {
+        if (item.name === payload) {
           return { ...item, done: !item.done };
         } else {
           return item;
         }
       });
-      return { ...state, shopList: Object.assign({}, state.shopList, { items: shopListItems }) };
+      return { ...state, items: changedItems };
     }
 
     case ACTION_ITEM_CREATE: {
-            const newItem = {
+      const newItem = {
         name: payload,
-        done: false,
-        id: uuidv4(),
+        done: false
       };
-      return { ...state, shopList: Object.assign({}, state.shopList, { items: [...state.shopList.items, newItem] }) };
+      return { ...state, items: [...state.items, newItem] };
     }
 
     case ACTION_ITEM_DELETE:
       return {
         ...state,
-        shopList: Object.assign({}, state.shopList, {
-          items: state.shopList.items.filter((item) => item.id != payload),
-        }),
+        items: state.items.filter((item) => item.name != payload),
       };
+
+    case ACTION_USER_ADD:
+      console.log(payload, "-");
+      return { ...state, users: [...state.users, payload] };
 
     /*
     case "remove":
@@ -115,9 +128,11 @@ const ShopListDetailDataProvider = createComponent({
     //@@viewOn:private
     const { children } = props;
 
-    console.log(uuidv4());
+    console.log("xxx", props);
+    const { identity } = useSession();
+    console.log("session", identity);
 
-    const [reducerState, dispatch] = useReducer(reducer, initialReducerState);
+    const [reducerState, dispatch] = useReducer(reducer, createInitialState(props.id, identity.uuIdentity));
 
     function handleChangeName(newName) {
       dispatch({
@@ -147,15 +162,23 @@ const ShopListDetailDataProvider = createComponent({
       });
     }
 
+    function handleAddUser(id) {
+      dispatch({
+        type: ACTION_USER_ADD,
+        payload: id,
+      });
+    }
+
     const renderChildren = () => {
       return React.Children.map(children, (child) => {
         return React.cloneElement(child, {
-          shopList: reducerState.shopList,
+          shopList: reducerState,
           callsMap: {
             [ACTION_NAME_CHANGE]: handleChangeName,
             [ACTION_ITEM_TOGGLE]: handleToggleItem,
             [ACTION_ITEM_CREATE]: handleCreateItem,
             [ACTION_ITEM_DELETE]: handleDeleteItem,
+            [ACTION_USER_ADD]: handleAddUser,
           },
         });
       });

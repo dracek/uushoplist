@@ -1,5 +1,5 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content, useState } from "uu5g05";
+import {createVisualComponent, Utils, Content, useState, useSession} from "uu5g05";
 import { Button, Icon } from "uu5g05-elements";
 import Config from "./config/config.js";
 import EditHeaderModal from "./edit-header-modal.js";
@@ -36,6 +36,7 @@ const EditableHeader = createVisualComponent({
     const { children } = props;
 
     const [open, setOpen] = useState(false);
+    const { identity } = useSession();
 
     //@@viewOff:private
 
@@ -55,16 +56,16 @@ const EditableHeader = createVisualComponent({
     const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, EditableHeader);
 
     const name = (props.shopList && props.shopList.name) || "";
+    const isEditable = props.shopList && props.shopList.owner == identity.uuIdentity;
 
     return currentNestingLevel ? (
       <div {...attrs}>
         <div>Visual Component {EditableHeader.uu5Tag}</div>
         <h1>
           {name}
-          {" ....... "}
-          <Button onClick={() => setOpen(true)}>
+          {isEditable ? <Button onClick={() => setOpen(true)}>
             <Icon icon="mdi-pencil" />
-          </Button>
+          </Button> : null}
         </h1>
         <Content nestingLevel={currentNestingLevel}>{children}</Content>
         <EditHeaderModal name={name} onEdit={onEdit} onClose={onClose} open={open} />

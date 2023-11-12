@@ -1,10 +1,11 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content, useState } from "uu5g05";
+import {createVisualComponent, Utils, Content, useState, useSession} from "uu5g05";
 import { Button, Icon, Toggle } from "uu5g05-elements";
-import ShopListItem from "./shop-list-item.js";
-import ShopListCreateModal from "./shop-list-create-modal.js";
+import Plus4U5Elements from "uu_plus4u5g02-elements";
+import ListUsersAddModal from "./list-users-add-modal";
 import ShopListDeleteModal from "./shop-list-delete-modal.js";
 import Config from "./config/config.js";
+import ListUsersItem from "./list-users-item";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -19,9 +20,9 @@ const Css = {
 //@@viewOn:helpers
 //@@viewOff:helpers
 
-const ShopListDetail = createVisualComponent({
+const ListUsers = createVisualComponent({
   //@@viewOn:statics
-  uu5Tag: Config.TAG + "ShopListDetail",
+  uu5Tag: Config.TAG + "ListUsers",
   nestingLevel: ["areaCollection", "area"],
   //@@viewOff:statics
 
@@ -41,7 +42,7 @@ const ShopListDetail = createVisualComponent({
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
 
-    const [showDone, setShowDone] = useState(true);
+    const { identity } = useSession();
 
     function onCreateOpen() {
       setCreateOpen(true);
@@ -51,8 +52,8 @@ const ShopListDetail = createVisualComponent({
       setCreateOpen(false);
     }
 
-    function onCreate(data) {
-      props.callsMap.createItem(data);
+    function onAdd(data) { //
+      props.callsMap.addUser(data);
       setCreateOpen(false);
     }
 
@@ -71,11 +72,6 @@ const ShopListDetail = createVisualComponent({
       setDeleteOpen(false);
       setCurrentItem(null);
     }
-
-    function t(e){
-      setShowDone(e.data.value);
-    }
-
     //@@viewOff:private
 
     //@@viewOn:interface
@@ -83,35 +79,37 @@ const ShopListDetail = createVisualComponent({
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopListDetail);
+    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ListUsers);
 
     console.log("detail map", props.callsMap);
 
-    const items = props.shopList && props.shopList.items ? props.shopList.items : [];
+    const users = props.shopList && props.shopList.users ? props.shopList.users : [];
+
+    console.log(users);
+    console.log(identity.uuIdentity);
+
+    function isEditable(uuid){
+      return (identity.uuIdentity === props.shopList.owner || identity.uuIdentity === uuid);
+    }
 
     return currentNestingLevel ? (
       <div {...attrs}>
-        <div>Visual Component {ShopListDetail.uu5Tag}</div>
+        <div>Visual Component {ListUsers.uu5Tag}</div>
         <div>
-          <div>
-            <Toggle label="Včetně splněných" value={showDone} onChange={t} box />
-          </div>
-          <div>
             <Button onClick={onCreateOpen}>
-              <Icon icon={"mdi-plus"} /> Nová
+              <Icon icon={"mdi-plus"} /> Přidat
             </Button>
-          </div>
         </div>
 
         <div>
-          {items
-            .filter((item) => !item.done || showDone)
-            .map((item, index) => (
-              <ShopListItem item={item} key={item.name} onToggle={props.callsMap.toggleItem} onDeleteOpen={onDeleteOpen} />
-            ))}
+          <ListUsersItem uuIdentity={props.shopList.owner} role={"Owner"} isEditable={false}/>
+          <>
+          {users
+            .map((item) => <ListUsersItem key={item} uuIdentity={item} role={"Member"} isEditable={isEditable(item)} />)}
+          </>
         </div>
 
-        <ShopListCreateModal onCreate={onCreate} onClose={onCreateClose} open={createOpen} />
+        <ListUsersAddModal onAdd={onAdd} onClose={onCreateClose} open={createOpen} />
         <ShopListDeleteModal item={currentItem} onDelete={onDelete} onClose={onDeleteClose} open={deleteOpen} />
 
         <Content nestingLevel={currentNestingLevel}>{children}</Content>
@@ -122,6 +120,6 @@ const ShopListDetail = createVisualComponent({
 });
 
 //@@viewOn:exports
-export { ShopListDetail };
-export default ShopListDetail;
+export { ListUsers };
+export default ListUsers;
 //@@viewOff:exports
