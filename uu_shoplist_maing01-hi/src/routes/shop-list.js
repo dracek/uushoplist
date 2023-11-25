@@ -61,7 +61,7 @@ let ShopList = createVisualComponent({
           {(props) => (
             <div className={Css.inner()}>
               {EditableHeader(props)}
-              <Grid templateColumns={{ xs: "1fr", m: "2fr 1fr" }} columnGap={"25px"}>
+              <Grid templateColumns={{ xs: "1fr", m: "2fr 1fr" }} columnGap={"5px"}>
                 {ShopListDetail(props)}
                 {ListUsers(props)}
               </Grid>

@@ -7,6 +7,9 @@ import { withRoute } from "uu_plus4u5g02-app";
 import Config from "./config/config.js";
 import WelcomeRow from "../bricks/welcome-row.js";
 import RouteBar from "../core/route-bar.js";
+import ShopListDataProvider from "../bricks/home/shop-list-data-provider.js";
+import ShopLists from "../bricks/home/shop-lists.js";
+
 import importLsi from "../lsi/import-lsi.js";
 //@@viewOff:imports
 
@@ -16,6 +19,13 @@ import importLsi from "../lsi/import-lsi.js";
 //@@viewOn:css
 const Css = {
   main: () => Config.Css.css({}),
+  inner: () =>
+    Config.Css.css({
+      display: "block",
+      padding: "24px 40px",
+      margin: "0 auto",
+      maxWidth: "1400px",
+    }),
 };
 //@@viewOff:css
 
@@ -62,20 +72,13 @@ let Home = createVisualComponent({
           <Uu5Elements.Text category="story" segment="body" type="common">
             <Content>
               {
-                "<uu5string/>Základní seznam, aktuálně přihlášený uživatel je owner listu <Uu5Elements.Link href='shopList?id=1' >Seznam 1</Uu5Elements.Link> (má všechna oprávnění)"
+                "<uu5string/>Cizí seznamy nelze mazat - nejdříve si vytvořte vlastní. V prokliku do detailu je nastaven aktuálně přihlášený uživatel jako owner, kromě <Uu5Elements.Link href='shopList?id=1' >seznam č.1</Uu5Elements.Link> (tam je nastavený jen jako member pro testování oprávnění). Data se udržují jsou pouze na úrovni routy, ne při přechodu mezi nimi (listy mají stejná defaultní data)."
               }
             </Content>
           </Uu5Elements.Text>
         </WelcomeRow>
-        <WelcomeRow>
-          <Uu5Elements.Text category="story" segment="body" type="common">
-            <Content>
-              {
-                "<uu5string/>Základní seznam, aktuálně přihlášený uživatel je member listu <Uu5Elements.Link href='shopList?id=2' >Seznam 2</Uu5Elements.Link> (omezené oprávnění)"
-              }
-            </Content>
-          </Uu5Elements.Text>
-        </WelcomeRow>
+
+        <ShopListDataProvider>{(props) => <div className={Css.inner()}>{ShopLists(props)}</div>}</ShopListDataProvider>
       </div>
     );
     //@@viewOff:render

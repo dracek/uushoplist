@@ -16,7 +16,7 @@ const ACTION_USER_DELETE = "deleteUser";
 
 //@@viewOn:helpers
 const initialReducerState = {
-  name: "Seznam č.",
+  name: "Seznam id ",
   items: [
     {
       name: "trvanlivé mléko",
@@ -40,11 +40,9 @@ function createInitialState(id, userId) {
   newState.name = newState.name + id;
 
   if (id == 1) {
-    newState.owner = userId;
-  } else if (id == 2) {
     newState.users = [...newState.users, userId];
   } else {
-    alert("Na tento list nemáte oprávnění - backend by vrátil error.");
+    newState.owner = userId;
   }
   return newState;
 }
