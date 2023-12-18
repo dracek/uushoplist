@@ -1,42 +1,19 @@
 //@@viewOn:imports
-import { createComponent, useReducer, useSession } from "uu5g05";
+import { createComponent, useState, useSession, useEffect, useRoute } from "uu5g05";
+import { useAlertBus } from "uu5g05-elements";
 import Config from "./config/config.js";
+import Calls from "calls";
 //@@viewOff:imports
 
 //@@viewOn:constants
-
-const ACTION_NAME_CHANGE = "changeName";
-const ACTION_ITEM_TOGGLE = "toggleItem";
-const ACTION_ITEM_CREATE = "createItem";
-const ACTION_ITEM_DELETE = "deleteItem";
-const ACTION_USER_ADD = "addUser";
-const ACTION_USER_DELETE = "deleteUser";
-
+const STATUS_DONE = "DONE";
+const STATUS_WAITING = "WAITING";
+const STATUS_ERROR = "ERROR";
 //@@viewOff:constants
 
 //@@viewOn:helpers
-const initialReducerState = {
-  name: "Seznam id ",
-  items: [
-    {
-      name: "trvanlivé mléko",
-      done: true,
-    },
-    {
-      name: "hlávkové zelí",
-      done: false,
-    },
-    {
-      name: "játrová paštika",
-      done: false,
-    },
-  ],
-  owner: "15-8545-1",
-  users: ["7411-6694-3445-0000"],
-};
-
-function createInitialState(id, userId) {
-  let newState = Object.assign({}, initialReducerState);
+function mockOwner(res, id, userId) {
+  let newState = Object.assign({}, res);
   newState.name = newState.name + id;
 
   if (id == 1) {
@@ -47,55 +24,6 @@ function createInitialState(id, userId) {
   return newState;
 }
 
-// jen pro mockování server calls :)
-function reducer(state, action) {
-  const payload = action.payload;
-
-  //console.log("Reducer action:", action.type, payload);
-
-  switch (action.type) {
-    case ACTION_NAME_CHANGE:
-      return { ...state, name: payload };
-
-    case ACTION_ITEM_TOGGLE: {
-      const changedItems = state.items.map((item) => {
-        if (item.name === payload) {
-          return { ...item, done: !item.done };
-        } else {
-          return item;
-        }
-      });
-      return { ...state, items: changedItems };
-    }
-
-    case ACTION_ITEM_CREATE: {
-      const newItem = {
-        name: payload,
-        done: false,
-      };
-      return { ...state, items: [...state.items, newItem] };
-    }
-
-    case ACTION_ITEM_DELETE:
-      return {
-        ...state,
-        items: state.items.filter((item) => item.name != payload),
-      };
-
-    case ACTION_USER_ADD:
-      return { ...state, users: [...state.users, payload] };
-
-    case ACTION_USER_DELETE:
-      return {
-        ...state,
-        users: state.users.filter((item) => item != payload),
-      };
-
-    default:
-      console.error("Unrecognized action type", action.type);
-      return state;
-  }
-}
 //@@viewOff:helpers
 
 const ShopListDetailDataProvider = createComponent({
@@ -114,66 +42,153 @@ const ShopListDetailDataProvider = createComponent({
   render(props) {
     //@@viewOn:private
     const { identity } = useSession();
+    const { addAlert } = useAlertBus();
+    const [, setRoute] = useRoute();
 
-    const [reducerState, dispatch] = useReducer(reducer, createInitialState(props.id, identity.uuIdentity));
+    const [status, setStatus] = useState(STATUS_DONE);
+    const [data, setData] = useState({});
 
-    function handleChangeName(newName) {
-      dispatch({
-        type: ACTION_NAME_CHANGE,
-        payload: newName,
-      });
+    useEffect(() => {
+      getList({ id: props.id });
+    }, []);
+
+    function infoMsg(msg) {
+      addAlert(
+        Object.assign(
+          {
+            priority: "success",
+            durationMs: 2500,
+          },
+          msg
+        )
+      );
     }
 
-    function handleToggleItem(id) {
-      dispatch({
-        type: ACTION_ITEM_TOGGLE,
-        payload: id,
-      });
+    function alertMsg(msg) {
+      addAlert(
+        Object.assign(
+          {
+            header: "Error",
+            priority: "error",
+          },
+          msg
+        )
+      );
     }
 
-    function handleCreateItem(name) {
-      dispatch({
-        type: ACTION_ITEM_CREATE,
-        payload: name,
-      });
+    async function getList(dtoIn) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.getList(dtoIn);
+
+        setData(mockOwner(res, props.id, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot load detail data." });
+      }
     }
 
-    function handleDeleteItem(id) {
-      dispatch({
-        type: ACTION_ITEM_DELETE,
-        payload: id,
-      });
+    async function handleChangeName(newName) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.updateList({id: props.id, name: newName});
+
+        setData(mockOwner(res, props.id, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot update detail." });
+      }
     }
 
-    function handleAddUser(id) {
-      dispatch({
-        type: ACTION_USER_ADD,
-        payload: id,
-      });
+    async function handleToggleItem(name, state) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.updateItem({id: props.id, itemName: name, done: state});
+
+        setData(mockOwner(res, props.id, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot update item state." });
+      }
     }
 
-    function handleDeleteUser(id) {
+    async function handleCreateItem(name) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.createItem({id: props.id, itemName: name});
+
+        setData(mockOwner(res, props.id, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+        infoMsg({ message: "Položka '" + name + "' vytvořena." });
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot create new item." });
+      }
+    }
+    
+    async function handleDeleteItem(name) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.deleteItem({id: props.id, itemName: name});
+
+        setData(mockOwner(res, props.id, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+        infoMsg({ message: "Položka '" + name + "' smazána." });
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot delete item." });
+      }
+    }
+
+    async function handleAddUser(id) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.addUser({id: props.id, userId: id});
+
+        setData(mockOwner(res, props.id, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+        infoMsg({ message: "Uživatel '" + id + "' přidán." });
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot add user." });
+      }
+    }
+
+    async function handleDeleteUser(id) {
       if (identity.uuIdentity === id) {
-        alert(
-          "Touto akcí uživatel sám sebe smaže z tohoto listu, po uložení by došlo k přesměrování na routu se seznamem shopping listů a tento list se mu tam už nezobrazí. (routa zatím není implementována)"
-        );
+        setStatus(STATUS_WAITING);
+        let res = await Calls.deleteUser({id: props.id, userId: id});
+        setStatus(STATUS_DONE);
+        infoMsg({ message: "Uživatel sám sebe odebral z listu." });
+        setRoute("home");
       } else {
-        dispatch({
-          type: ACTION_USER_DELETE,
-          payload: id,
-        });
+        try {
+          setStatus(STATUS_WAITING);
+          let res = await Calls.deleteUser({id: props.id, userId: id});
+  
+          setData(mockOwner(res, props.id, identity.uuIdentity));
+          setStatus(STATUS_DONE);
+          infoMsg({ message: "Uživatel '" + id + "' odebrán." });
+        } catch (error) {
+          setStatus(STATUS_ERROR);
+          alertMsg({ message: "Cannot delete user." });
+        }
       }
     }
 
     const newProps = {
-      shopList: reducerState,
+      status: status,
+      shopList: data,
       callsMap: {
-        [ACTION_NAME_CHANGE]: handleChangeName,
-        [ACTION_ITEM_TOGGLE]: handleToggleItem,
-        [ACTION_ITEM_CREATE]: handleCreateItem,
-        [ACTION_ITEM_DELETE]: handleDeleteItem,
-        [ACTION_USER_ADD]: handleAddUser,
-        [ACTION_USER_DELETE]: handleDeleteUser,
+        changeName: handleChangeName,
+        toggleItem: handleToggleItem,
+        createItem: handleCreateItem,
+        deleteItem: handleDeleteItem,
+        addUser: handleAddUser,
+        deleteUser: handleDeleteUser,
       },
     };
 

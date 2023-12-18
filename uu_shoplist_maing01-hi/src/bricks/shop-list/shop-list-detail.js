@@ -98,7 +98,7 @@ const ShopListDetail = createVisualComponent({
 
     const items = props.shopList && props.shopList.items ? props.shopList.items : [];
 
-    return currentNestingLevel ? (
+    return props.status !== "ERROR" ? (
       <div {...attrs}>
         <div className={Css.itemContainer()}>
           <div>

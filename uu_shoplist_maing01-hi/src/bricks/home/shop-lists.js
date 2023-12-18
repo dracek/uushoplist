@@ -47,13 +47,12 @@ const ShopLists = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
-    const { children } = props;
+    const { children, showArchived, setShowArchived } = props;
 
     const [createOpen, setCreateOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [currentList, setCurrentList] = useState(null);
-
-    const [showArchived, setShowArchived] = useState(true);
+   
 
     function onCreateOpen() {
       setCreateOpen(true);
@@ -101,7 +100,7 @@ const ShopLists = createVisualComponent({
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
     const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopLists);
 
-    return currentNestingLevel ? (
+    return props.status !== "ERROR" ? (
       <div {...attrs}>
         <div className={Css.itemContainer()}>
           <div>
@@ -115,7 +114,6 @@ const ShopLists = createVisualComponent({
         </div>
         <Grid templateColumns={{ xs: "1fr", m: "1fr 1fr", l: "1fr 1fr 1fr" }} columnGap={"25px"}>
           {props.shopLists
-            .filter((item) => !item.archived || showArchived)
             .map((list) => (
               <ShopListTile key={list.id} list={list} onToggle={onToggle} onDelete={onDeleteOpen} />
             ))}

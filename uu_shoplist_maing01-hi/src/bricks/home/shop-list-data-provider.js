@@ -1,20 +1,21 @@
 //@@viewOn:imports
 import { v4 } from "uuid";
-import { createComponent, useState, useSession } from "uu5g05";
+import { createComponent, useState, useSession, useEffect } from "uu5g05";
+import { useAlertBus } from "uu5g05-elements";
 import Config from "./config/config.js";
+import Calls from "calls";
 //@@viewOff:imports
 
 //@@viewOn:constants
-const initialData = [
-  { id: 1, name: "Seznam č.1", owner: "1-1", archived: false },
-  { id: 2, name: "Potraviny", owner: "1-1", archived: true },
-  { id: 7, name: "Drogerie", owner: "1-1", archived: false },
-  { id: 5, name: "Nedělní nákup", owner: "1-1", archived: false },
-];
-
+const STATUS_DONE = "DONE";
+const STATUS_WAITING = "WAITING";
+const STATUS_ERROR = "ERROR";
 //@@viewOff:constants
 
 //@@viewOn:helpers
+function mockOwner(data, userId) {
+  return data.map(item => (item.id === 1) ? item : {...item, owner : userId});
+}
 //@@viewOff:helpers
 
 const ShopListDataProvider = createComponent({
@@ -33,32 +34,100 @@ const ShopListDataProvider = createComponent({
   render(props) {
     //@@viewOn:private
     const { identity } = useSession();
+    const { addAlert } = useAlertBus();
 
-    const [data, setData] = useState(initialData);
+    const [showArchived, setShowArchived] = useState(true);
+    const [status, setStatus] = useState(STATUS_DONE);
+    const [data, setData] = useState([]);
 
-    function handleCreateList(name) {
-      const newList = { id: v4(), name: name, owner: identity.uuIdentity, archived: false };
-      setData([...data, newList]);
-    }
+    useEffect(() => {
+      listLists();
+    }, []);
 
-    function handleToggleList(id, state) {
-      setData(
-        data.map((list) => {
-          if (list.id === id) {
-            return { ...list, archived: state };
-          } else {
-            return list;
-          }
-        })
+    function infoMsg(msg) {
+      addAlert(
+        Object.assign(
+          {
+            priority: "success",
+            durationMs: 2500,
+          },
+          msg
+        )
       );
     }
 
-    function handleDeleteList(id) {
-      setData(data.filter((list) => list.id != id));
+    function alertMsg(msg) {
+      addAlert(
+        Object.assign(
+          {
+            header: "Error",
+            priority: "error",
+          },
+          msg
+        )
+      );
+    }
+
+    async function listLists(dtoIn = {}) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.listLists({showArchived, ...dtoIn, });
+        setData(mockOwner(res.data, identity.uuIdentity));
+        setStatus(STATUS_DONE);
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot load shopping lists." });
+      }
+    }
+
+    async function handleSetShowArchived(state) {
+      setShowArchived(state);
+      listLists({showArchived : state});
+    }
+
+    async function handleCreateList(name) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.createList({ name: name });
+        setStatus(STATUS_DONE);
+        infoMsg({ message: "List s názvem '" + name + "' vytvořen." });
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot create new item." });
+      }
+      listLists();
+    }
+
+    async function handleToggleList(id, state) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.updateList({ id: id, archived: state });
+        setStatus(STATUS_DONE);
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot edit list." });
+      }
+      listLists();
+    }
+
+    async function handleDeleteList(id) {
+      try {
+        setStatus(STATUS_WAITING);
+        let res = await Calls.deleteList({ id: id });
+        setStatus(STATUS_DONE);
+        infoMsg({ message: "List id '" + id + "' byl smazán." });
+      } catch (error) {
+        setStatus(STATUS_ERROR);
+        alertMsg({ message: "Cannot delete list." });
+      }
+      listLists();
     }
 
     const newProps = {
+      status: status,
       shopLists: data,
+      showArchived,
+      setShowArchived : handleSetShowArchived,
       callsMap: {
         handleCreateList,
         handleToggleList,

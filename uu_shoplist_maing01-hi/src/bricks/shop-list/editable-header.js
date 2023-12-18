@@ -63,7 +63,7 @@ const EditableHeader = createVisualComponent({
     const name = (props.shopList && props.shopList.name) || "";
     const isEditable = props.shopList && props.shopList.owner == identity.uuIdentity;
 
-    return currentNestingLevel ? (
+    return props.status !== "ERROR" ? (
       <div {...attrs}>
         <h1 className={Css.header()}>
           {name}

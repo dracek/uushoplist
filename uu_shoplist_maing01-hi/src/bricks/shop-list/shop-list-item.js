@@ -84,7 +84,7 @@ const ShopListItem = createVisualComponent({
             {props.item.name}
           </div>
           <div className={Css.innerContainer()}>
-            <Button onClick={() => props.onToggle(props.item.name)}>
+            <Button onClick={() => props.onToggle(props.item.name, !isDone)}>
               <Icon icon={isDone ? "mdi-check-outline" : "mdi-check"} />
             </Button>
             <Button className={Css.deleteButton()} onClick={() => props.onDeleteOpen(props.item)}>

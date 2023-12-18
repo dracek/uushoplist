@@ -1,0 +1,20 @@
+{
+    "id": 1337,
+    "name": "Seznam id ",
+    "items": [
+      {
+        "name": "trvanlivé mléko",
+        "done": true
+      },
+      {
+        "name": "hlávkové zelí",
+        "done": true
+      },
+      {
+        "name": "játrová paštika",
+        "done": false
+      }
+    ],
+    "owner": "7283-6695-991-0000",
+    "users": ["4323-1807-9417-0000"]  
+  }

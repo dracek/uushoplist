@@ -13,11 +13,56 @@ const Calls = {
     return response.data;
   },
 
-  // // example for mock calls
-  // loadDemoContent(dtoIn) {
-  //   const commandUri = Calls.getCommandUri("loadDemoContent");
-  //   return Calls.call("get", commandUri, dtoIn);
-  // },
+  getList(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/get");
+    return Calls.call("get", commandUri, dtoIn);
+  },
+
+  updateList(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/update");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  updateItem(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/updateItem");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  createItem(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/createItem");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  deleteItem(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/deleteItem");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  addUser(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/addUser");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  deleteUser(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/deleteUser");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  listLists(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/list");
+    return Calls.call("get", commandUri, dtoIn);
+  },
+
+  createList(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/create");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
+  deleteList(dtoIn) {
+    const commandUri = Calls.getCommandUri("shopList/delete");
+    return Calls.call("post", commandUri, dtoIn);
+  },
+
 
   loadIdentityProfiles() {
     const commandUri = Calls.getCommandUri("sys/uuAppWorkspace/initUve");

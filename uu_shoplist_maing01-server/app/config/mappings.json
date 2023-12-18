@@ -25,6 +25,56 @@
         "realization": "index.html",
         "httpMethod": "GET",
         "type": "UVE"
+      },
+      "shopList/create": {
+        "realization": "api/controllers/ShopListController.create",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/update": {
+        "realization": "api/controllers/ShopListController.update",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/delete": {
+        "realization": "api/controllers/ShopListController.delete",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/get": {
+        "realization": "api/controllers/ShopListController.get",
+        "httpMethod": "GET",
+        "type": "CMD"
+      },
+      "shopList/list": {
+        "realization": "api/controllers/ShopListController.list",
+        "httpMethod": "GET",
+        "type": "CMD"
+      },
+      "shopList/addMember": {
+        "realization": "api/controllers/ShopListController.addMember",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/removeMember": {
+        "realization": "api/controllers/ShopListController.removeMember",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/addItem": {
+        "realization": "api/controllers/ShopListController.addItem",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/removeItem": {
+        "realization": "api/controllers/ShopListController.removeItem",
+        "httpMethod": "POST",
+        "type": "CMD"
+      },
+      "shopList/setItemState": {
+        "realization": "api/controllers/ShopListController.setItemState",
+        "httpMethod": "POST",
+        "type": "CMD"
       }
     }
   }

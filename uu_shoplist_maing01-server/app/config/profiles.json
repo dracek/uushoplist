@@ -1,15 +1,14 @@
 {
   "{asid}": {
-    "profileList": ["AsidAuthorities", "AsidExecutives", "AsidLicenseOwner", "Public"],
-    "useCaseMap": {
-    }
+    "profileList": ["AsidAuthorities","AsidExecutives","AsidLicenseOwner","Public"],
+    "useCaseMap": {}
   },
   "*": {
-    "profileList": ["Authorities", "Executives", "AwidLicenseOwner", "Public", "Authenticated", "AwidInitiator"],
+    "profileList": ["Authorities","Executives","AwidLicenseOwner","Public","Authenticated","AwidInitiator","ListOwners","Members"],
     "useCaseMap": {
       "sys/uuAppWorkspace/init": {
-        "sysStateList": ["created", "assigned"],
-        "profileList": ["AwidLicenseOwner", "AwidInitiator"]
+        "sysStateList": ["created","assigned"],
+        "profileList": ["AwidLicenseOwner","AwidInitiator"]
       },
       "sys/uuAppWorkspace/load": {
         "sysStateList": ["active"],
@@ -24,7 +23,47 @@
       },
       "sys/uuAppWorkspace/initUve": {
         "sysStateList": ["created"],
-        "profileList": ["Public", "AwidLicenseOwner"]
+        "profileList": ["Public","AwidLicenseOwner"]
+      },
+      "shopList/create": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners"]
+      },
+      "shopList/update": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners"]
+      },
+      "shopList/delete": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners"]
+      },
+      "shopList/get": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners","Members"]
+      },
+      "shopList/list": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners","Members"]
+      },
+      "shopList/addMember": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners"]
+      },
+      "shopList/removeMember": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners","Members"]
+      },
+      "shopList/addItem": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners"]
+      },
+      "shopList/removeItem": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners"]
+      },
+      "shopList/setItemState": {
+        "sysStateList": ["active"],
+        "profileList": ["ListOwners","Members"]
       }
     }
   }

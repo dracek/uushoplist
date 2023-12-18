@@ -27,6 +27,11 @@ const Css = {
     Config.Css.css({
       marginLeft: "auto",
     }),
+  leftButtonDisabled: () =>
+    Config.Css.css({
+      marginLeft: "auto",
+      cursor: "not-allowed"
+    }),  
 };
 //@@viewOff:css
 
@@ -104,12 +109,12 @@ const ListUsers = createVisualComponent({
       return identity.uuIdentity === props.shopList.owner || identity.uuIdentity === uuid;
     }
 
-    return currentNestingLevel ? (
+    return props.status !== "ERROR" ? (
       <div {...attrs}>
         <div className={Css.itemContainer()}>
           <Button
             onClick={isOwner() ? onCreateOpen : undefined}
-            className={Css.leftButton()}
+            className={isOwner() ? Css.leftButton() : Css.leftButtonDisabled()}
             colorScheme={isOwner() ? "positive" : "negative"}
           >
             <Icon icon={"mdi-plus"} /> Přidat

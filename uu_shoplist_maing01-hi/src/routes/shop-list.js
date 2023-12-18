@@ -1,6 +1,6 @@
 //@@viewOn:imports
 import { createVisualComponent, Utils } from "uu5g05";
-import { Grid } from "uu5g05-elements";
+import { Grid, Pending } from "uu5g05-elements";
 import { withRoute } from "uu_plus4u5g02-app";
 import Config from "./config/config.js";
 import ShopListDetailDataProvider from "../bricks/shop-list/shop-list-detail-data-provider.js";
@@ -54,19 +54,25 @@ let ShopList = createVisualComponent({
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
     const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopList);
 
+    let renderChildren = (childrenProps) => { 
+
+      return <div className={Css.inner()}>
+        {childrenProps.status === "WAITING" && <Pending type="circular" size="max"></Pending> }
+        {childrenProps.status === "ERROR" && <h1>Chyba komunikace, přenačtěte prosím stránku.</h1> }
+
+        {EditableHeader(childrenProps)}
+        <Grid templateColumns={{ xs: "1fr", m: "2fr 1fr" }} columnGap={"5px"}>
+          {ShopListDetail(childrenProps)}
+          {ListUsers(childrenProps)}
+        </Grid>
+      </div>
+    }
+
     return currentNestingLevel ? (
       <div {...attrs}>
         <RouteBar />
         <ShopListDetailDataProvider id={props.params.id}>
-          {(props) => (
-            <div className={Css.inner()}>
-              {EditableHeader(props)}
-              <Grid templateColumns={{ xs: "1fr", m: "2fr 1fr" }} columnGap={"5px"}>
-                {ShopListDetail(props)}
-                {ListUsers(props)}
-              </Grid>
-            </div>
-          )}
+          {renderChildren}
         </ShopListDetailDataProvider>
       </div>
     ) : null;

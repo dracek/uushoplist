@@ -27,7 +27,7 @@
     "initialize": "Initialize"
   },
   "Menu": {
-    "home": "Welcome",
+    "home": "List od lists",
     "about": "About Application"
   }
 }
