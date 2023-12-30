@@ -13,7 +13,14 @@ const Create = {
       this.message = "DtoIn is not valid.";
     }
   },
-  
+
+  ShopListDaoCreateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Create.UC_CODE}shopListDaoCreateFailed`;
+      this.message = "ShopList create failed.";
+    }
+  },
 };
 
 const Update = {
@@ -24,6 +31,30 @@ const Update = {
       super(...arguments);
       this.code = `${Update.UC_CODE}invalidDtoIn`;
       this.message = "DtoIn is not valid.";
+    }
+  },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ShopListDaoUpdateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}shopListDaoUpdateFailed`;
+      this.message = "ShopList update failed.";
     }
   },
   
@@ -39,6 +70,30 @@ const Delete = {
       this.message = "DtoIn is not valid.";
     }
   },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Delete.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ShopListDaoDeleteFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Update.UC_CODE}shopListDaoDeleteFailed`;
+      this.message = "ShopList delete failed.";
+    }
+  },
   
 };
 
@@ -50,6 +105,22 @@ const Get = {
       super(...arguments);
       this.code = `${Get.UC_CODE}invalidDtoIn`;
       this.message = "DtoIn is not valid.";
+    }
+  },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Get.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${Get.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
     }
   },
   
@@ -65,6 +136,14 @@ const List = {
       this.message = "DtoIn is not valid.";
     }
   },
+
+  ShopListDaoListFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${List.UC_CODE}shopListDaoListFailed`;
+      this.message = "ShopList list failed.";
+    }
+  },
   
 };
 
@@ -78,7 +157,30 @@ const AddMember = {
       this.message = "DtoIn is not valid.";
     }
   },
-  
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${AddMember.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${AddMember.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ShopListDaoUpdateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${AddMember.UC_CODE}shopListDaoUpdateFailed`;
+      this.message = "ShopList update failed when adding member.";
+    }
+  },
 };
 
 const RemoveMember = {
@@ -89,6 +191,30 @@ const RemoveMember = {
       super(...arguments);
       this.code = `${RemoveMember.UC_CODE}invalidDtoIn`;
       this.message = "DtoIn is not valid.";
+    }
+  },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${RemoveMember.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${RemoveMember.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ShopListDaoUpdateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${RemoveMember.UC_CODE}shopListDaoUpdateFailed`;
+      this.message = "ShopList update failed when removing member.";
     }
   },
   
@@ -104,6 +230,30 @@ const AddItem = {
       this.message = "DtoIn is not valid.";
     }
   },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${AddItem.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${AddItem.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ShopListDaoUpdateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${AddItem.UC_CODE}shopListDaoUpdateFailed`;
+      this.message = "ShopList update failed when adding item.";
+    }
+  },
   
 };
 
@@ -117,6 +267,30 @@ const RemoveItem = {
       this.message = "DtoIn is not valid.";
     }
   },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${RemoveItem.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${RemoveItem.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ShopListDaoUpdateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${RemoveItem.UC_CODE}shopListDaoUpdateFailed`;
+      this.message = "ShopList update failed when removing item.";
+    }
+  },
   
 };
 
@@ -128,6 +302,38 @@ const SetItemState = {
       super(...arguments);
       this.code = `${SetItemState.UC_CODE}invalidDtoIn`;
       this.message = "DtoIn is not valid.";
+    }
+  },
+
+  ShopListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${SetItemState.UC_CODE}shopListNotPresent`;
+      this.message = "ShopList is not present.";
+    }
+  },
+
+  NotEnoughRights: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${SetItemState.UC_CODE}notEnoughRights`;
+      this.message = "Not enough rights for this action.";
+    }
+  },
+
+  ItemListNotPresent: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${SetItemState.UC_CODE}itemListNotPresent`;
+      this.message = "Item is not present.";
+    }
+  },
+
+  ShopListDaoUpdateFailed: class extends ShoplistMainUseCaseError {
+    constructor() {
+      super(...arguments);
+      this.code = `${SetItemState.UC_CODE}shopListDaoUpdateFailed`;
+      this.message = "ShopList update failed when updating item state.";
     }
   },
   
