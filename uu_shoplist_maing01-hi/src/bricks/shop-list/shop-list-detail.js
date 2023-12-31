@@ -1,10 +1,12 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content, useState } from "uu5g05";
+import { createVisualComponent, Utils, Content, useState, useLsi } from "uu5g05";
 import { Button, Icon, Toggle } from "uu5g05-elements";
 import ShopListItem from "./shop-list-item.js";
 import ShopListCreateModal from "./shop-list-create-modal.js";
 import ShopListDeleteModal from "./shop-list-delete-modal.js";
 import Config from "./config/config.js";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -47,6 +49,8 @@ const ShopListDetail = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const { children } = props;
+
+    const lsi = useLsi(importLsi).ShopListDetail || {};
 
     const [createOpen, setCreateOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -102,11 +106,11 @@ const ShopListDetail = createVisualComponent({
       <div {...attrs}>
         <div className={Css.itemContainer()}>
           <div>
-            <Toggle label="Včetně splněných" value={showDone} onChange={onDone} box />
+            <Toggle label={lsi.withDone} value={showDone} onChange={onDone} box />
           </div>
           <div>
             <Button onClick={onCreateOpen} colorScheme="positive">
-              <Icon icon={"mdi-plus"} /> Nová
+              <Icon icon={"mdi-plus"} /> {lsi.newButton}
             </Button>
           </div>
         </div>

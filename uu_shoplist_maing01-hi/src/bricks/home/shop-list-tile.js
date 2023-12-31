@@ -1,8 +1,9 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content, useSession } from "uu5g05";
+import { createVisualComponent, Utils, useSession, useLsi } from "uu5g05";
 import { Button, Icon, Badge, Link } from "uu5g05-elements";
-import Plus4U5Elements from "uu_plus4u5g02-elements";
 import Config from "./config/config.js";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -10,14 +11,12 @@ import Config from "./config/config.js";
 
 //@@viewOn:css
 const Css = {
-  main: (archived) =>
+  main: () =>
     Config.Css.css({
       border: "1px solid gray",
       borderRadius: "5px",
-      backgroundColor: archived ? "#F3F3F3" : "white",
       padding: "10px",
       paddingLeft: "20px",
-
       overflow: "hidden",
       textOverflow: "ellipsis",
       minWidth: 0,
@@ -92,6 +91,8 @@ const ShopListTile = createVisualComponent({
     //@@viewOn:private
     const { children } = props;
 
+    const lsi = useLsi(importLsi).ShopListTile || {};
+
     const { identity } = useSession();
 
     //@@viewOff:private
@@ -103,7 +104,7 @@ const ShopListTile = createVisualComponent({
     const { archived } = props.list;
     const isMyList = props.list.owner == identity.uuIdentity;
 
-    const attrs = Utils.VisualComponent.getAttrs(props, Css.main(archived));
+    const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
     const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopListTile);
 
     return currentNestingLevel ? (
@@ -111,26 +112,28 @@ const ShopListTile = createVisualComponent({
         <div className={Css.itemContainer()}>
           <div className={Css.itemText()}>
             <div className={Css.shorten()}>
-              <Badge size="s" borderRadius="full" colorScheme={archived ? "dim" : "light-green"} />
-              <span><Link href={"shopList?id=" + props.list.id}>{props.list.name}</Link></span>
+              <Badge size="s" borderRadius="full" colorScheme={archived ? "dim" : "green"} />
+              <span>
+                <Link href={"shopList?id=" + props.list.id}>{props.list.name}</Link>
+              </span>
             </div>
           </div>
           <div className={Css.innerContainer()}>
             <Button onClick={() => props.onToggle(props.list.id, !archived)}>
               <Icon
-                tooltip={archived ? "Obnovit" : "Archivovat"}
+                tooltip={archived ? lsi.renew : lsi.archive}
                 icon={archived ? "uugds-refresh" : "uugdsstencil-uiaction-archive"}
               />
             </Button>
             {isMyList && (
               <Button className={Css.deleteButton()} onClick={() => props.onDelete(props.list)}>
-                <Icon tooltip={"Smazat"} icon="mdi-trash-can" />
+                <Icon tooltip={lsi.delete} icon="mdi-trash-can" />
               </Button>
             )}
           </div>
         </div>
         <div className={Css.author()}>
-          <i>{isMyList ? "můj seznam" : "cizí seznam"}</i>
+          <i>{isMyList ? lsi.myList : lsi.otherList}</i>
         </div>
       </div>
     ) : null;

@@ -1,8 +1,9 @@
 //@@viewOn:imports
-import { createVisualComponent, Lsi, useRoute } from "uu5g05";
+import { createVisualComponent, Lsi, useRoute, Utils, useAppBackground } from "uu5g05";
 import Plus4U5App from "uu_plus4u5g02-app";
 import Uu5Elements, { Link } from "uu5g05-elements";
 
+import ModeSwitch from "../bricks/mode-switch.js";
 import Config from "./config/config.js";
 import importLsi from "../lsi/import-lsi.js";
 //@@viewOff:imports
@@ -11,6 +12,13 @@ import importLsi from "../lsi/import-lsi.js";
 //@@viewOff:constants
 
 //@@viewOn:css
+const Css = {
+  main: (background) =>
+    Config.Css.css({
+      backgroundColor: background === "dark" ? "rgb(33, 33, 33)" : null,
+    }),
+};
+
 //@@viewOff:css
 
 //@@viewOn:helpers
@@ -32,6 +40,7 @@ const RouteBar = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const [, setRoute] = useRoute();
+    const [background] = useAppBackground();
 
     const appActionList = [
       { children: <Lsi import={importLsi} path={["Menu", "home"]} />, onClick: () => setRoute("home") }
@@ -42,7 +51,13 @@ const RouteBar = createVisualComponent({
     //@@viewOff:interface
 
     //@@viewOn:render
-    return <Plus4U5App.RouteBar appActionList={appActionList} {...props} />;
+    const attrs = Utils.VisualComponent.getAttrs(props, Css.main(background));
+
+    return (
+      <Plus4U5App.RouteBar appActionList={appActionList} {...props} {...attrs}>
+        <ModeSwitch />
+      </Plus4U5App.RouteBar>
+    );
     //@@viewOff:render
   },
 });

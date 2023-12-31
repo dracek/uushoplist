@@ -58,7 +58,6 @@ const EditableHeader = createVisualComponent({
     }
 
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, EditableHeader);
 
     const name = (props.shopList && props.shopList.name) || "";
     const isEditable = props.shopList && props.shopList.owner == identity.uuIdentity;

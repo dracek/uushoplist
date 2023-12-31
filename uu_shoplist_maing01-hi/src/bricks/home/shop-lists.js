@@ -1,10 +1,12 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content, useState } from "uu5g05";
+import { createVisualComponent, Utils, Lsi, useState, useLsi } from "uu5g05";
 import { Button, Icon, Grid, Toggle } from "uu5g05-elements";
 import ShopListsCreateModal from "./shop-lists-create-modal";
 import ShopListsDeleteModal from "./shop-lists-delete-modal";
 import ShopListTile from "./shop-list-tile";
 import Config from "./config/config.js";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -49,10 +51,11 @@ const ShopLists = createVisualComponent({
     //@@viewOn:private
     const { children, showArchived, setShowArchived } = props;
 
+    const lsi = useLsi(importLsi).ShopLists || {};
+
     const [createOpen, setCreateOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [currentList, setCurrentList] = useState(null);
-   
 
     function onCreateOpen() {
       setCreateOpen(true);
@@ -98,25 +101,23 @@ const ShopLists = createVisualComponent({
 
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
-    const currentNestingLevel = Utils.NestingLevel.getNestingLevel(props, ShopLists);
 
     return props.status !== "ERROR" ? (
       <div {...attrs}>
         <div className={Css.itemContainer()}>
           <div>
-            <Toggle label="Včetně archivovaných" value={showArchived} onChange={onArchivechanged} box />
+            <Toggle label={lsi.withArchived} value={showArchived} onChange={onArchivechanged} box />
           </div>
           <div>
             <Button onClick={onCreateOpen} colorScheme="positive">
-              <Icon icon={"mdi-plus"} /> Nový
+              <Icon icon={"mdi-plus"} /> <Lsi import={importLsi} path={["ShopLists", "newButton"]} />
             </Button>
           </div>
         </div>
         <Grid templateColumns={{ xs: "1fr", m: "1fr 1fr", l: "1fr 1fr 1fr" }} columnGap={"25px"}>
-          {props.shopLists
-            .map((list) => (
-              <ShopListTile key={list.id} list={list} onToggle={onToggle} onDelete={onDeleteOpen} />
-            ))}
+          {props.shopLists.map((list) => (
+            <ShopListTile key={list.id} list={list} onToggle={onToggle} onDelete={onDeleteOpen} />
+          ))}
         </Grid>
         <ShopListsCreateModal onCreate={onCreate} onClose={onCreateClose} open={createOpen} />
         <ShopListsDeleteModal onDelete={onDelete} onClose={onDeleteClose} open={deleteOpen} list={currentList} />

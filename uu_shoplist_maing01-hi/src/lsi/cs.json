@@ -13,9 +13,6 @@
     "rightsError": "K zobrazení komponenty nemáte dostatečná práva.",
     "btNotConnected": "Aplikace není napojená na Business Territory."
   },
-  "Home": {
-    "welcome": "Vítejte"
-  },
   "InitAppWorkspace": {
     "notAuthorized": "Nemáte dostatečná práva k použití aplikace.",
     "formHeader": "Inicializovat aplikaci",
@@ -29,5 +26,83 @@
   "Menu": {
     "home": "Přehled seznamů",
     "about": "O aplikaci"
+  },
+
+
+  "Home": {
+    "welcome": "Vítejte",
+    "errorInfo": "Chyba komunikace, přenačtěte prosím stránku.",
+    "info": "<uu5string/>Aktuálně přihlášený uživatel je nastavený jako owner seznamů, kromě %s. Tam je nastavený jen jako member pro testování oprávnění (na Home i v prokliku do detailu)."
+  },
+  "ShopLists": {
+    "newButton": "Nový",
+    "withArchived": "včetně archivovaných"
+  },
+  "ShopListTile" : {
+    "myList" : "můj list",
+    "otherList" : "cizí list",
+    "renew" : "Obnovit",
+    "archive" : "Archivovat",
+    "delete" : "Smazat"
+  },
+  "ShopListsCreateModal" : {
+    "newList" : "Nový seznam",
+    "label" : "Název seznamu",
+    "holder" : "Název seznamu, pokud možno krátký"
+  },
+  "ShopListsDeleteModal" : {
+    "info" : "Opravdu smazat seznam"
+  },
+  "ShopListDataProvider" : {
+    "loadError": "Shopping listy nelze načíst.",
+    "create" :  "List s názvem '%s' vytvořen.",
+    "createError" :  "Nelze vytvořit nový shopping list.",
+    "delete" :  "List id '%s' byl smazán.",
+    "deleteError" :  "Shopping list nelze smazat.",
+    "updateError": "Shopping list nelze editovat."
+  },
+  "EditHeaderModal" : {
+    "header" : "Upravit seznam",
+    "label" : "Nový název seznamu",
+    "holder" : "Napište sem nový název"
+  },
+  "ListUsersAddModal" : {
+    "header" : "Přidat uživatele",
+    "label" : "ID uživatele",
+    "holder" : "UUID uživatele"
+  },
+  "ListUsersDeleteModal" : {
+    "header" : "Opravdu smazat uživatele '%s' ?"
+  },
+  "ListUsers" : {
+    "add": "Přidat",
+    "owner" : "Vlastník",
+    "member" : "Člen"
+  },
+  "ShopListCreateModal" : {
+    "header" : "Nová položka",
+    "label" : "Název položky",
+    "holder" : "Název položky včetně množství"
+  },
+  "ShopListDeleteModal" : {
+    "header" : "Opravdu smazat položku %s ?"
+  },
+  "ShopListDetail": {
+    "newButton": "Nový",
+    "withDone": "včetně splněných"
+  },
+  "ShopListDetailDataProvider" : {
+    "loadError": "Nelze načíst detail.",
+    "updateError": "Nelze upravit detail.",
+    "updateStateError": "Nelze upravit stav.",
+    "create" :  "Položka '%s' vytvořena.",
+    "createError" :  "Nelze vytvořit položku.",
+    "delete" :  "Položka '%s' smazána.",
+    "deleteError" :  "Nelze smazat položku.",
+    "addUser" :  "Uživatel '%s' přidán.",
+    "addUserError" :  "Nelze přidat uživatele.",
+    "deleteUserSelf" :  "Uživatel sám sebe odebral z listu.",
+    "deleteUser" :  "Uživatel '%s' odebrán.",
+    "deleteUserError" :  "Nelze smazat uživatele."
   }
 }

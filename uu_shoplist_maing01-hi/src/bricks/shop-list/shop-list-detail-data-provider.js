@@ -1,8 +1,10 @@
 //@@viewOn:imports
-import { createComponent, useState, useSession, useEffect, useRoute } from "uu5g05";
+import { createComponent, useState, useSession, useEffect, useRoute, useLsi } from "uu5g05";
 import { useAlertBus } from "uu5g05-elements";
 import Config from "./config/config.js";
 import Calls from "calls";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -41,6 +43,8 @@ const ShopListDetailDataProvider = createComponent({
 
   render(props) {
     //@@viewOn:private
+    const lsi = useLsi(importLsi).ShopListDetailDataProvider || {};
+
     const { identity } = useSession();
     const { addAlert } = useAlertBus();
     const [, setRoute] = useRoute();
@@ -85,7 +89,7 @@ const ShopListDetailDataProvider = createComponent({
         setStatus(STATUS_DONE);
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot load detail data." });
+        alertMsg({ message: lsi.loadError });
       }
     }
 
@@ -98,7 +102,7 @@ const ShopListDetailDataProvider = createComponent({
         setStatus(STATUS_DONE);
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot update detail." });
+        alertMsg({ message: lsi.updateError });
       }
     }
 
@@ -111,7 +115,7 @@ const ShopListDetailDataProvider = createComponent({
         setStatus(STATUS_DONE);
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot update item state." });
+        alertMsg({ message: lsi.updateStateError });
       }
     }
 
@@ -122,13 +126,13 @@ const ShopListDetailDataProvider = createComponent({
 
         setData(mockOwner(res, props.id, identity.uuIdentity));
         setStatus(STATUS_DONE);
-        infoMsg({ message: "Položka '" + name + "' vytvořena." });
+        infoMsg({ message: lsi.create && lsi.create.replace("%s", name)});
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot create new item." });
+        alertMsg({ message: lsi.createError });
       }
     }
-    
+
     async function handleDeleteItem(name) {
       try {
         setStatus(STATUS_WAITING);
@@ -136,10 +140,10 @@ const ShopListDetailDataProvider = createComponent({
 
         setData(mockOwner(res, props.id, identity.uuIdentity));
         setStatus(STATUS_DONE);
-        infoMsg({ message: "Položka '" + name + "' smazána." });
+        infoMsg({ message: lsi.delete && lsi.delete.replace("%s", name) });
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot delete item." });
+        alertMsg({ message: lsi.deleteError });
       }
     }
 
@@ -150,10 +154,10 @@ const ShopListDetailDataProvider = createComponent({
 
         setData(mockOwner(res, props.id, identity.uuIdentity));
         setStatus(STATUS_DONE);
-        infoMsg({ message: "Uživatel '" + id + "' přidán." });
+        infoMsg({ message: lsi.addUser && lsi.addUser.replace("%s", id) });
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot add user." });
+        alertMsg({ message: lsi.addUserError });
       }
     }
 
@@ -162,7 +166,7 @@ const ShopListDetailDataProvider = createComponent({
         setStatus(STATUS_WAITING);
         let res = await Calls.deleteUser({id: props.id, userId: id});
         setStatus(STATUS_DONE);
-        infoMsg({ message: "Uživatel sám sebe odebral z listu." });
+        infoMsg({ message: lsi.deleteUserSelf });
         setRoute("home");
       } else {
         try {
@@ -171,10 +175,10 @@ const ShopListDetailDataProvider = createComponent({
   
           setData(mockOwner(res, props.id, identity.uuIdentity));
           setStatus(STATUS_DONE);
-          infoMsg({ message: "Uživatel '" + id + "' odebrán." });
+          infoMsg({ message: lsi.deleteUser && lsi.deleteUser.replace("%s", identity.uuIdentity) });
         } catch (error) {
           setStatus(STATUS_ERROR);
-          alertMsg({ message: "Cannot delete user." });
+          alertMsg({ message: lsi.deleteUserError });
         }
       }
     }

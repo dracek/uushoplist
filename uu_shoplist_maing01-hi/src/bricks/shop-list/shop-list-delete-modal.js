@@ -1,8 +1,10 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils } from "uu5g05";
+import { createVisualComponent, Utils, useLsi } from "uu5g05";
 import { Modal } from "uu5g05-elements";
 import { Form, SubmitButton, CancelButton } from "uu5g05-forms";
 import Config from "./config/config.js";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -43,6 +45,8 @@ const ShopListDeleteModal = createVisualComponent({
     //@@viewOff:interface
 
     //@@viewOn:render
+    const lsi = useLsi(importLsi).ShopListDeleteModal || {};
+
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
 
     function onSubmit(event) {
@@ -50,7 +54,7 @@ const ShopListDeleteModal = createVisualComponent({
       props.onClose();
     }
 
-    const name = "Opravdu smazat položku " + (props.item && props.item.name) + "?";
+    const name = lsi.header && lsi.header.replace("%s", props.item && props.item.name);
 
     return (
       <Modal {...attrs} header={name} open={props.open} onClose={props.onClose} collapsible={false}>

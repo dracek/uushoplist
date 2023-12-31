@@ -27,43 +27,43 @@
       },
       "shopList/create": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/update": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/delete": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/get": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/list": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/addMember": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/removeMember": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/addItem": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/removeItem": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       },
       "shopList/setItemState": {
         "sysStateList": ["active"],
-        "profileList": ["ListOwners"]
+        "profileList": ["ListOwners", "Authenticated"]
       }
     }
   }

@@ -1,9 +1,10 @@
 //@@viewOn:imports
-import { v4 } from "uuid";
-import { createComponent, useState, useSession, useEffect } from "uu5g05";
+import { createComponent, useState, useSession, useEffect, useLsi } from "uu5g05";
 import { useAlertBus } from "uu5g05-elements";
 import Config from "./config/config.js";
 import Calls from "calls";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -14,7 +15,7 @@ const STATUS_ERROR = "ERROR";
 
 //@@viewOn:helpers
 function mockOwner(data, userId) {
-  return data.map(item => (item.id === 1) ? item : {...item, owner : userId});
+  return data.map((item) => (item.id === 1 ? item : { ...item, owner: userId }));
 }
 //@@viewOff:helpers
 
@@ -33,6 +34,8 @@ const ShopListDataProvider = createComponent({
 
   render(props) {
     //@@viewOn:private
+    const lsi = useLsi(importLsi).ShopListDataProvider || {};
+
     const { identity } = useSession();
     const { addAlert } = useAlertBus();
 
@@ -71,18 +74,18 @@ const ShopListDataProvider = createComponent({
     async function listLists(dtoIn = {}) {
       try {
         setStatus(STATUS_WAITING);
-        let res = await Calls.listLists({showArchived, ...dtoIn, });
+        let res = await Calls.listLists({ showArchived, ...dtoIn });
         setData(mockOwner(res.data, identity.uuIdentity));
         setStatus(STATUS_DONE);
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot load shopping lists." });
+        alertMsg({ message: lsi.loadError });
       }
     }
 
     async function handleSetShowArchived(state) {
       setShowArchived(state);
-      listLists({showArchived : state});
+      listLists({ showArchived: state });
     }
 
     async function handleCreateList(name) {
@@ -90,10 +93,10 @@ const ShopListDataProvider = createComponent({
         setStatus(STATUS_WAITING);
         let res = await Calls.createList({ name: name });
         setStatus(STATUS_DONE);
-        infoMsg({ message: "List s názvem '" + name + "' vytvořen." });
+        infoMsg({ message: lsi.create && lsi.create.replace("%s", name) });
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot create new item." });
+        alertMsg({ message: lsi.createError });
       }
       listLists();
     }
@@ -105,7 +108,7 @@ const ShopListDataProvider = createComponent({
         setStatus(STATUS_DONE);
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot edit list." });
+        alertMsg({ message: lsi.updateError });
       }
       listLists();
     }
@@ -115,10 +118,10 @@ const ShopListDataProvider = createComponent({
         setStatus(STATUS_WAITING);
         let res = await Calls.deleteList({ id: id });
         setStatus(STATUS_DONE);
-        infoMsg({ message: "List id '" + id + "' byl smazán." });
+        infoMsg({ message: lsi.delete && lsi.delete.replace("%s", id) });
       } catch (error) {
         setStatus(STATUS_ERROR);
-        alertMsg({ message: "Cannot delete list." });
+        alertMsg({ message: lsi.deleteError });
       }
       listLists();
     }
@@ -127,7 +130,7 @@ const ShopListDataProvider = createComponent({
       status: status,
       shopLists: data,
       showArchived,
-      setShowArchived : handleSetShowArchived,
+      setShowArchived: handleSetShowArchived,
       callsMap: {
         handleCreateList,
         handleToggleList,

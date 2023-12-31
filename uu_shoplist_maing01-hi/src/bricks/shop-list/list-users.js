@@ -1,10 +1,12 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils, Content, useState, useSession } from "uu5g05";
+import { createVisualComponent, Utils, Content, useState, useSession, useLsi } from "uu5g05";
 import { Button, Icon } from "uu5g05-elements";
 import ListUsersAddModal from "./list-users-add-modal";
 import ListUsersDeleteModal from "./list-users-delete-modal";
 import Config from "./config/config.js";
 import ListUsersItem from "./list-users-item";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -55,6 +57,8 @@ const ListUsers = createVisualComponent({
   render(props) {
     //@@viewOn:private
     const { children } = props;
+
+    const lsi = useLsi(importLsi).ListUsers || {};
 
     const [createOpen, setCreateOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
@@ -117,18 +121,18 @@ const ListUsers = createVisualComponent({
             className={isOwner() ? Css.leftButton() : Css.leftButtonDisabled()}
             colorScheme={isOwner() ? "positive" : "negative"}
           >
-            <Icon icon={"mdi-plus"} /> Přidat
+            <Icon icon={"mdi-plus"} /> {lsi.add}
           </Button>
         </div>
 
         <div>
-          <ListUsersItem uuIdentity={props.shopList.owner} role={"Owner"} isEditable={false} />
+          <ListUsersItem uuIdentity={props.shopList.owner} role={lsi.owner} isEditable={false} />
           <>
             {users.map((item) => (
               <ListUsersItem
                 key={item}
                 uuIdentity={item}
-                role={"Member"}
+                role={lsi.member}
                 isEditable={isEditable(item)}
                 onDeleteClick={onDeleteOpen}
               />

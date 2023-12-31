@@ -1,8 +1,10 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils } from "uu5g05";
+import { createVisualComponent, Utils, useLsi } from "uu5g05";
 import { Modal } from "uu5g05-elements";
 import { Form, FormText, SubmitButton, CancelButton } from "uu5g05-forms";
 import Config from "./config/config.js";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -47,6 +49,8 @@ const ShopListCreateModal = createVisualComponent({
     //@@viewOff:interface
 
     //@@viewOn:render
+    const lsi = useLsi(importLsi).ShopListCreateModal || {};
+
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
 
     function onSubmit(event) {
@@ -54,15 +58,9 @@ const ShopListCreateModal = createVisualComponent({
     }
 
     return (
-      <Modal {...attrs} header={"Nová položka"} open={props.open} onClose={props.onClose} collapsible={false}>
+      <Modal {...attrs} header={lsi.header} open={props.open} onClose={props.onClose} collapsible={false}>
         <Form onSubmit={onSubmit} disableLeaveConfirmation={true}>
-          <FormText
-            name="name"
-            label="Název položky"
-            required
-            placeholder={"Název položky včetně množství"}
-            className={Css.textRow()}
-          />
+          <FormText name="name" label={lsi.label} required placeholder={lsi.holder} className={Css.textRow()} />
           <CancelButton onClick={props.onClose} />
           <SubmitButton className={Css.submit()} />
         </Form>

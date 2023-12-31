@@ -13,9 +13,6 @@
     "rightsError": "You do not have sufficient rights to display this component.",
     "btNotConnected": "The application is not connected to a Business Territory."
   },
-  "Home": {
-    "welcome": "Welcome"
-  },
   "InitAppWorkspace": {
     "notAuthorized": "You do not have sufficient rights to use the application.",
     "formHeader": "Initialize uuApp",
@@ -27,7 +24,85 @@
     "initialize": "Initialize"
   },
   "Menu": {
-    "home": "List od lists",
+    "home": "List of lists",
     "about": "About Application"
+  },
+
+  "Home": {
+    "welcome": "Welcome",
+    "errorInfo": "Communication error, please reload the page.",
+    "info": "<uu5string/>The currently logged in user is set as list owner, except for %s. There he is only set as member for permissions testing (on Home page and in the detail)."
+  },
+  "ShopLists": {
+    "newButton": "New",
+    "withArchived": "include archived"
+  },
+  "ShopListTile" : {
+    "myList" : "my list",
+    "otherList" : "other list",
+    "renew" : "Renew",
+    "archive" : "Archive",
+    "delete" : "Delete"
+  },
+  "ShopListsCreateModal" : {
+    "newList" : "New list",
+    "label" : "List name",
+    "holder" : "List name, preferably short"
+  },
+  "ShopListsDeleteModal" : {
+    "info" : "Really delete list"
+  },
+  "ShopListDataProvider" : {
+    "loadError": "Cannot load shopping lists.",
+    "create" :  "List named '%s' was created.",
+    "createError" :  "Cannot create new item.",
+    "delete" :  "List id '%s' was deleted.",
+    "deleteError" :  "Cannot delete list.",
+    "updateError": "Cannot edit list."
+  },
+  "EditHeaderModal" : {
+    "header" : "Edit list",
+    "label" : "New list name",
+    "holder" : "Write new list name"
+  },
+  "ListUsersAddModal" : {
+    "header" : "Add user",
+    "label" : "user ID",
+    "holder" : "user UUID"
+  },
+  "ListUsersDeleteModal" : {
+    "header" : "Really delete user '%s' ?"
+  },
+  "ListUsers" : {
+    "add": "Add",
+    "owner" : "Owner",
+    "member" : "Member"
+  },
+  "ShopListCreateModal" : {
+    "header" : "New item",
+    "label" : "Item name",
+    "holder" : "Item name with amount"
+  },
+  "ShopListDeleteModal" : {
+    "header" : "Really delete item '%s' ?"
+  },
+  "ShopListDetail": {
+    "newButton": "New",
+    "withDone": "include done"
+  },
+  "ShopListDetailDataProvider" : {
+    "loadError": "Cannot load detail data.",
+    "updateError": "Cannot update detail.",
+    "updateStateError": "Cannot update item state.",
+    "create" :  "Item '%s' created.",
+    "createError" :  "Cannot create new item.",
+    "delete" :  "Item '%s' deleted.",
+    "deleteError" :  "Cannot delete item.",
+    "addUser" :  "User '%s' added.",
+    "addUserError" :  "Cannot add user.",
+    "deleteUserSelf" :  "User removed him/herself from list",
+    "deleteUser" :  "User '%s' removed.",
+    "deleteUserError" :  "Cannot delete user."
   }
+
 }

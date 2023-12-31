@@ -1,8 +1,10 @@
 //@@viewOn:imports
-import { createVisualComponent, Utils } from "uu5g05";
+import { createVisualComponent, Utils, useLsi } from "uu5g05";
 import { Modal } from "uu5g05-elements";
 import { Form, FormText, SubmitButton, CancelButton } from "uu5g05-forms";
 import Config from "./config/config.js";
+
+import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -41,6 +43,8 @@ const EditHeaderModal = createVisualComponent({
 
   render(props) {
     //@@viewOn:private
+    const lsi = useLsi(importLsi).EditHeaderModal || {};
+
     function onSubmit(event) {
       props.onEdit(event.data.value.name);
       props.onClose();
@@ -54,14 +58,14 @@ const EditHeaderModal = createVisualComponent({
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
 
     return (
-      <Modal {...attrs} header={"Upravit seznam"} open={props.open} onClose={props.onClose} collapsible={false}>
+      <Modal {...attrs} header={lsi.header} open={props.open} onClose={props.onClose} collapsible={false}>
         <Form onSubmit={onSubmit} disableLeaveConfirmation={true}>
           <FormText
             name="name"
-            label="Nový název seznamu"
+            label={lsi.label}
             initialValue={props.name}
             required
-            placeholder={"napište sem nový název"}
+            placeholder={lsi.holder}
             className={Css.textRow()}
           />
           <CancelButton onClick={props.onClose} />

@@ -56,14 +56,22 @@ let Home = createVisualComponent({
     //@@viewOn:render
     const attrs = Utils.VisualComponent.getAttrs(props, Css.main());
 
-    let renderChildren = (childrenProps) => { 
-      return <div className={Css.inner()}>
-        {childrenProps.status === "WAITING" && <Pending type="circular" size="max"></Pending> }
-        {childrenProps.status === "ERROR" && <h1>Chyba komunikace, přenačtěte prosím stránku.</h1> }
+    let renderChildren = (childrenProps) => {
+      return (
+        <div className={Css.inner()}>
+          {childrenProps.status === "WAITING" && <Pending type="circular" size="max"></Pending>}
+          {childrenProps.status === "ERROR" && (
+            <h1>
+              <Lsi import={importLsi} path={["Home", "errorInfo"]} />
+            </h1>
+          )}
 
-        {ShopLists(childrenProps)}
-      </div>
-    }
+          {ShopLists(childrenProps)}
+        </div>
+      );
+    };
+
+    const link = "<Uu5Elements.Link href='shopList?id=1'>Seznam č.1</Uu5Elements.Link>";
 
     return (
       <div {...attrs}>
@@ -76,9 +84,7 @@ let Home = createVisualComponent({
         <WelcomeRow>
           <Text category="story" segment="body" type="common">
             <Content>
-              {
-                "<uu5string/>Aktuálně přihlášený uživatel je nastavený jako owner seznamů, kromě <Uu5Elements.Link href='shopList?id=1' >Seznam č.1</Uu5Elements.Link>. Tam je nastavený jen jako member pro testování oprávnění (na Home i v prokliku do detailu)."
-              }
+              <Lsi import={importLsi} path={["Home", "info"]} params={[link]} />
             </Content>
           </Text>
         </WelcomeRow>
