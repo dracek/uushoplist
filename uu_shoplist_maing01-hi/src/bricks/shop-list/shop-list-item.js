@@ -38,7 +38,7 @@ const Css = {
     Config.Css.css({
       textDecoration: "line-through",
       textDecorationThickness: "2px",
-      textDecorationColor: "red",
+      textDecorationColor: "green",
     }),
   deleteButton: () =>
     Config.Css.css({

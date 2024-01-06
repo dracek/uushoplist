@@ -5,8 +5,9 @@ import ShopListItem from "./shop-list-item.js";
 import ShopListCreateModal from "./shop-list-create-modal.js";
 import ShopListDeleteModal from "./shop-list-delete-modal.js";
 import Config from "./config/config.js";
-
+import ItemGraph from "../item-graph.js";
 import importLsi from "../../lsi/import-lsi";
+
 //@@viewOff:imports
 
 //@@viewOn:constants
@@ -130,6 +131,9 @@ const ShopListDetail = createVisualComponent({
 
         <ShopListCreateModal onCreate={onCreate} onClose={onCreateClose} open={createOpen} />
         <ShopListDeleteModal item={currentItem} onDelete={onDelete} onClose={onDeleteClose} open={deleteOpen} />
+
+        
+        <ItemGraph items={items} />
 
         <Content nestingLevel={currentNestingLevel}>{children}</Content>
       </div>

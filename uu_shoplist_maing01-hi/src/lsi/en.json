@@ -103,6 +103,14 @@
     "deleteUserSelf" :  "User removed him/herself from list",
     "deleteUser" :  "User '%s' removed.",
     "deleteUserError" :  "Cannot delete user."
+  },
+  "ItemGraph": {
+    "done": "done",
+    "notDone": "not done yet"
+  },
+  "ListGraph": {
+    "done": "done",
+    "notDone": "not done yet"
   }
 
 }

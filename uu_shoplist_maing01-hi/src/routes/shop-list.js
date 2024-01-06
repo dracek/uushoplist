@@ -64,6 +64,7 @@ let ShopList = createVisualComponent({
         <Grid templateColumns={{ xs: "1fr", m: "2fr 1fr" }} columnGap={"5px"}>
           {ShopListDetail(childrenProps)}
           {ListUsers(childrenProps)}
+
         </Grid>
       </div>
     }

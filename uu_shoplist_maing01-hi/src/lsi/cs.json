@@ -104,5 +104,13 @@
     "deleteUserSelf" :  "Uživatel sám sebe odebral z listu.",
     "deleteUser" :  "Uživatel '%s' odebrán.",
     "deleteUserError" :  "Nelze smazat uživatele."
+  },
+  "ItemGraph": {
+    "done": "splněno",
+    "notDone": "nesplněno"
+  },
+  "ListGraph": {
+    "done": "splněno",
+    "notDone": "nesplněno"
   }
 }

@@ -5,6 +5,7 @@ import ShopListsCreateModal from "./shop-lists-create-modal";
 import ShopListsDeleteModal from "./shop-lists-delete-modal";
 import ShopListTile from "./shop-list-tile";
 import Config from "./config/config.js";
+import ListGraph from "../list-graph";
 
 import importLsi from "../../lsi/import-lsi";
 //@@viewOff:imports
@@ -119,6 +120,7 @@ const ShopLists = createVisualComponent({
             <ShopListTile key={list.id} list={list} onToggle={onToggle} onDelete={onDeleteOpen} />
           ))}
         </Grid>
+        <ListGraph lists={props.shopLists} />
         <ShopListsCreateModal onCreate={onCreate} onClose={onCreateClose} open={createOpen} />
         <ShopListsDeleteModal onDelete={onDelete} onClose={onDeleteClose} open={deleteOpen} list={currentList} />
       </div>

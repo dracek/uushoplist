@@ -1,8 +1,109 @@
 {
     "data" : [
-        { "id": 1, "name": "Seznam č.1", "owner": "1-1", "archived": false },
-        { "id": 2, "name": "Potraviny", "owner": "1-1", "archived": true },
-        { "id": 7, "name": "Drogerie", "owner": "1-1", "archived": false },
-        { "id": 5, "name": "Nedělní nákup", "owner": "1-1", "archived": false }
+        { "id": 1, "name": "Seznam č.1", "owner": "1-1", "archived": false,
+        "items": [
+          {
+            "name": "trvanlivé mléko",
+            "done": true
+          },
+          {
+            "name": "hlávkové zelí",
+            "done": true
+          },
+          {
+            "name": "játrová paštika",
+            "done": false
+          },
+          {
+            "name": "pivo!!!",
+            "done": true
+          },
+          {
+            "name": "ubrousky",
+            "done": true
+          }
+        ]},
+        { "id": 2, "name": "Potraviny", "owner": "1-1", "archived": true,
+        "items": [
+          {
+            "name": "bochník chleba",
+            "done": true
+          },
+          {
+            "name": "pomazánkové máslo",
+            "done": true
+          },
+          {
+            "name": "sýr (tvrdý)",
+            "done": true
+          },
+          {
+            "name": "kedlubna 3x",
+            "done": true
+          },
+          {
+            "name": "kečup - ostrý",
+            "done": false
+          },
+          {
+            "name": "tuzemák",
+            "done": true
+          },
+          {
+            "name": "polévka instantní",
+            "done": true
+          },
+          {
+            "name": "husí játra",
+            "done": true
+          },
+          {
+            "name": "petržel",
+            "done": true
+          },
+          {
+            "name": "chipsy",
+            "done": true
+          },
+          {
+            "name": "bujon",
+            "done": false
+          }
+        ]},
+        { "id": 7, "name": "Drogerie (bez itemů)", "owner": "1-1", "archived": false, "items": [] },
+        { "id": 5, "name": "Nedělní nákup", "owner": "1-1", "archived": false, "items": [
+          {
+            "name": "bochník chleba",
+            "done": true
+          },
+          {
+            "name": "pomazánkové máslo",
+            "done": false
+          },
+          {
+            "name": "sýr (tvrdý)",
+            "done": true
+          },
+          {
+            "name": "kedlubna 3x",
+            "done": false
+          },
+          {
+            "name": "kečup - ostrý",
+            "done": false
+          },
+          {
+            "name": "jablka",
+            "done": false
+          },
+          {
+            "name": "meloun",
+            "done": false
+          },
+          {
+            "name": "toaletní papír",
+            "done": false
+          }
+        ]}
       ]
 }
